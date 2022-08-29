@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,46 @@
     <hr class="header__line">
   </header>
 
-  <script src="./script.js"></script>
+  <main class="container">
+
+    <section class="profile">
+      <div class="profile__columns">
+        <div class="profile__left-column">
+
+          <img src="./images/Avatar.png" alt="Аватар" class="profile__avatar">
+
+          <div class="profile__info">
+            <h1 class="profile__name">Жак-Ив Кусто</h1>
+            <button class="profile__edit-button">
+              <img src="images/Edit Button.svg" alt="Кнопка редактирования">
+            </button>
+            <p class="profile__job">Исследователь океана</p>
+          </div>
+
+        </div>
+
+        <button class="profile__add-button">
+          <img src="./images/Add Button.svg" alt="Кнопка добавления поста">
+        </button>
+      </div>
+
+
+      <form class="profile__form">
+        <h2 class="profile__form-title">Редактировать профиль</h2>
+        <input type="text" name="name" id="name" value="" class="profile__form-name" required>
+        <input type="text" name="job" id="job" value="" class="profile__form-job">
+        <button type="submit" class="profile__form-button">Сохранить</button>
+        <button type="button" class="profile__form-button-close">
+          <img src="./images/Close Icon.svg" alt="Иконка Закрыть">
+        </button>
+      </form>
+
+
+    </section>
+
+  </main>
+
+  <script src="./index.js"></script>
 </body>
+
 </html>
