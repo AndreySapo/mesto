@@ -18,41 +18,97 @@
   <main class="container">
 
     <section class="profile">
-      <div class="profile__columns">
-        <div class="profile__left-column">
-
+      <div class="profile__container">
+        <div class="profile__container-left-column">
           <img src="./images/Avatar.png" alt="Аватар" class="profile__avatar">
-
           <div class="profile__info">
-            <h1 class="profile__name">Жак-Ив Кусто</h1>
-            <button class="profile__edit-button">
-              <img src="images/Edit Button.svg" alt="Кнопка редактирования">
-            </button>
+            <div class="profile__info-header">
+              <h1 class="profile__name">Жак-Ив Кусто</h1>
+              <button class="profile__edit-button">
+                <img src="images/Edit Button.svg" alt="Кнопка редактирования">
+              </button>
+            </div>
             <p class="profile__job">Исследователь океана</p>
           </div>
-
         </div>
 
         <button class="profile__add-button">
           <img src="./images/Add Button.svg" alt="Кнопка добавления поста">
         </button>
       </div>
+    </section>
 
-
+    <div class="form__overlay">
       <form class="profile__form">
         <h2 class="profile__form-title">Редактировать профиль</h2>
         <input type="text" name="name" id="name" value="" class="profile__form-name" required>
         <input type="text" name="job" id="job" value="" class="profile__form-job">
-        <button type="submit" class="profile__form-button">Сохранить</button>
-        <button type="button" class="profile__form-button-close">
+        <button type="submit" class="profile__form-save-button">Сохранить</button>
+        <button type="button" class="profile__form-close-button">
           <img src="./images/Close Icon.svg" alt="Иконка Закрыть">
         </button>
       </form>
+    </div>
+    
 
 
+
+
+
+    <section class="elements">
+      <ul class="elements__grid">
+        <li class="element">
+          <img src="./images/Baikal tinyfied.jpg" alt="Фото Байкала" class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Байкал</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+        <li class="element">
+          <img src="./images/Barcelona Spain tinyfied.jpg" alt="Фото Барселоны" class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Барселона</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+        <li class="element">
+          <img src="./images/Ex-Hacienda de Chautla, San Lucas el Grande, Mexico tinyfied.jpg" alt="Фото Мексика"
+            class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Мексика</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+        <li class="element">
+          <img src="./images/Lake Minnewanka tinyfied.jpg" alt="Озеро Минневанка в Канаде" class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Озеро Минневанка</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+        <li class="element">
+          <img src="./images/Mount Elbrus, Russia tinyfied.jpg" alt="Фото Эльбруса" class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Эльбрус</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+        <li class="element">
+          <img src="./images/Poon Hill, Ghode Pani, Nepal tinyfied.jpg" alt="Фото горы Пуун, Непал"
+            class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Непал</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+      </ul>
     </section>
 
   </main>
+
+  <footer class="footer">
+    <p class="footer__text">&copy; 2020 Mesto Russia</p>
+  </footer>
 
   <script src="./index.js"></script>
 </body>

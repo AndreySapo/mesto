@@ -10,32 +10,43 @@ let profileJob = profile.querySelector('.profile__job');
 let profileEditButton = profile.querySelector('.profile__edit-button');
 
 //выбираем элементы из формы
+// TODO переделать выбор селекторов
+let formOverlay = document.querySelector('.form__overlay');
 let form = document.querySelector('.profile__form');
 let formName = form.querySelector('#name');
 let formJob = form.querySelector('#job');
+let formSaveButton = form.querySelector('.profile__form-save-button');
+let formCloseButton = form.querySelector('.profile__form-close-button');
 
 //функция на передачу информации из профайла в форму + отображение формы
 function profileEditHandler(evt) {
-  form.setAttribute('style', 'display: grid');
+  formOverlay.setAttribute('style', 'display: block');
   formName.setAttribute('value', `${profileName.textContent}`);
   formJob.setAttribute('value', `${profileJob.textContent}`);
-  console.log('Открыто');
 }
 
 function closeForm(evt) {
   evt.preventDefault();
-  form.setAttribute('style', 'display: none');
-  console.log('Закрыто');
+  formOverlay.setAttribute('style', 'display: none');
 }
 
-function formSubmitHandler (evt) {
+function formSubmitHandler(evt) {
   evt.preventDefault();
   profileName.textContent = formName.value;
   profileJob.textContent = formJob.value;
-  console.log('Записано');
   closeForm(evt);
 }
 
 profileEditButton.addEventListener('click', profileEditHandler);
-form.addEventListener('submit', formSubmitHandler);
-form.addEventListener('button', closeForm);
+formSaveButton.addEventListener('click', formSubmitHandler);
+formCloseButton.addEventListener('click', closeForm);
+
+//на странице выбираем кнопки лайков
+let elements = document.querySelector('.elements__grid');
+let element = elements.querySelectorAll('.element');
+let likeButtons = elements.querySelectorAll('.element__button');
+
+//для каждой кнопки лайка при нажатии добавляем/убираем класс element__button_active
+likeButtons.forEach(elem => {
+  elem.addEventListener('click', () => elem.classList.toggle('element__button_active'))
+});
