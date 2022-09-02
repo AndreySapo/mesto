@@ -19,6 +19,17 @@
 @import url(./blocks/header/__logo/header__logo.css);
 @import url(./blocks/header/__line/header__line.css);
 
+/* Стили блока elements и element */
+@import url(./blocks/elements/elements.css);
+@import url(./blocks/elements/__grid/elements__grid.css);
+@import url(./blocks/element/element.css);
+@import url(./blocks/element/__image/element__image.css);
+@import url(./blocks/element/__group/element__group.css);
+@import url(./blocks/element/__image/element__image.css);
+@import url(./blocks/element/__title/element__title.css);
+@import url(./blocks/element/__button/element__button.css);
+@import url(./blocks/element/__button/_active/element__button_active.css);
+
 * {
   outline: 1px solid red;
   box-sizing: border-box;
@@ -311,86 +322,21 @@
 
 /*==================================*/
 
-.elements {
-  width: 100%;
-  margin-top: 50px;
-}
 
-.elements__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 282px);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  justify-content: space-between;
-  row-gap: 20px;
-}
 
-@media screen and (max-width: 879px) {
-  .elements__grid {
-    margin: 0 19px;
-    justify-content: center;
-    column-gap: 17px;
-  }
-}
 
-.element {
-  border-radius: 10px;
-  background-color: #fff;
-}
 
-.element__image {
-  width: 100%;
-  border-radius: 10px 10px 0 0;
-  height: 282px;
-  object-fit: cover;
-  display: block;
-}
 
-.element__group {
-  display: flex;
-  justify-content: space-between;
-  margin: 25px 15px 31px 21px;
-  align-items: center;
-}
 
-.element__title {
-  color: #000;
-  font-weight: 900;
-  font-size: 24px;
-  line-height: calc((29/24)*100%);
-  max-width: 224px;
-  margin: 0;
-  padding: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
-.element__button {
-  border: none;
-  background-image: url(./images/like_disabled.svg);
-  margin: 0;
-  padding: 0;
-  width: 22px;
-  height: 19px;
-  background-color: #fff;
-  transition: opacity .1s linear;
-}
 
-.element__button:hover {
-  opacity: .5;
-  cursor: pointer;
-}
 
-.element__button_active {
-  background-image: url(./images/like_active.svg);
-}
 
-.element__button_active:hover {
-  opacity: 1;
-  cursor: pointer;
-}
+
+
+
+
+
 
 .footer {
   max-width: 880px;
