@@ -1,8 +1,3 @@
-//При клике на profile__edit-button должно выполняться 3 действия
-//1. отмена display:none для попапа
-//2. заполняться input name value из profile__name
-//3. заполняться input job value из profile__job
-
 //Выбираем элементы из профайла
 let profile = document.querySelector('.profile__info');
 let profileName = profile.querySelector('.profile__name');

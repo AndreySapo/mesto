@@ -27,88 +27,139 @@
 .container {
   max-width: 880px;
   margin: 40px auto 66px;
-  position: relative;
+}
+
+@media screen and (max-width: 767px) {
+  .container {
+    margin: 42px auto 48px;
+  }
 }
 
 .profile {
+  max-width: 880px;
   width: 100%;
-  position: relative;
-  margin-bottom: 50px;
+  display: grid;
+  grid-template-columns: 120px 1fr 150px;
 }
 
-.profile__container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.profile__container-left-column {
-  display: flex;
-  justify-content: space-between;
-  gap: 30px;
+@media screen and (max-width: 767px) {
+  .profile {
+    grid-template-columns: 1fr;
+    grid-template-rows: 120px 1fr 50px;
+    justify-items: center;
+    max-width: 282px;
+    margin: 0 auto 50px;
+  }
 }
 
 .profile__avatar {
-  border-radius: 50%;
-  display: block;
   width: 120px;
   height: 120px;
 }
 
 .profile__info {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-areas: 'name edit-button''job job';
+  justify-content: start;
+  align-content: center;
+  align-items: center;
 }
 
-.profile__info-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
+@media screen and (max-width: 767px) {
+  .profile__info {
+    margin-top: 26px;
+    margin-bottom: 36px;
+  }
 }
 
 .profile__name {
+  /* стили текста */
   font-weight: 500;
   font-size: 42px;
   line-height: 114%;
-  margin: 0;
+  margin: 0 18px 16px 30px;
   padding: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  /* остальные стили */
+  grid-area: name;
 }
 
-.profile__job {
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 157%;
-  margin: 0;
-  padding: 0;
+@media screen and (max-width: 767px) {
+  .profile__name {
+    font-weight: 500;
+    font-size: 27px;
+    line-height: calc((33/27)*100%);
+    text-align: center;
+    margin-right: 10px;
+  }
 }
 
 .profile__edit-button {
+  /* стили кнопки */
+  background-image: url(./images/Edit\ Button.svg);
+  background-size: contain;
+  border: none;
+  width: 24px;
+  height: 24px;
+  background-color: #000;
   margin: 0;
   padding: 0;
-  border: none;
-  font-size: 0;
-  background-color: var(--bg-color);
-  align-self: center;
+  /* остальные стили */
+  grid-area: edit-button;
+  cursor: pointer;
   transition: opacity .1s linear;
 }
 
 .profile__edit-button:hover {
-  cursor: pointer;
   opacity: .6;
 }
 
+@media screen and (max-width: 767px) {
+  .profile__edit-button {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.profile__job {
+  /* стили текста */
+  font-weight: 400;
+  font-size: 18px;
+  line-height: calc((18/22)*100%);
+  margin: 0 0 0 30px;
+  padding: 0;
+  /* остальные стили */
+  grid-area: job;
+}
+
+@media screen and (max-width: 767px) {
+  .profile__job {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+  }
+}
+
 .profile__add-button {
+  /* стили кнопки */
+  background-image: url(./images/Add\ Button.svg);
+  background-size: contain;
+  border: none;
+  width: 150px;
+  height: 50px;
+  background-color: #000;
   margin: 0;
   padding: 0;
-  border: none;
-  font-size: 0;
-  background-color: var(--bg-color);
+  /* остальные стили */
+  align-self: center;
   transition: opacity .1s linear;
+  cursor: pointer;
 }
 
 .profile__add-button:hover {
-  cursor: pointer;
   opacity: .6;
 }
 
@@ -131,7 +182,9 @@
 
 .profile__form {
   display: grid;
-  padding: 34px 36px 37px 36px;
+  grid-template-rows: repeat(6, max-content);
+  grid-template-columns: calc(100% - 36px*2);
+  justify-content: center;
   position: fixed;
   top: 195px;
   left: 50%;
@@ -143,23 +196,51 @@
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
 }
 
+@media screen and (max-width: 767px) {
+  .profile__form {
+    grid-template-columns: calc(100% - 22px*2);
+    width: 282px;
+    height: 322px;
+    margin: 0 0 0 -141px;
+    top: 123px;
+  }
+}
+
 .profile__form-title {
-  margin: 0;
+  margin: 34px 0 54px 0;
   padding: 0;
   color: #000;
   font-weight: 900;
   font-size: 24px;
-  line-height: calc((29/24)*100%);
+  line-height: 121%;
+}
+
+@media screen and (max-width: 767px) {
+  .profile__form-title {
+    max-width: 238px;
+    font-weight: 900;
+    font-size: 18px;
+    line-height: calc((18/22)*100%);
+    margin: 25px 0 75px 0;
+  }
 }
 
 .profile__form-name {
+  border: none;
   font-weight: 400;
   font-size: 14px;
   line-height: calc((17/14)*100%);
   color: #000;
+  margin: 0 0 13px 0;
+  padding: 0;
+}
+
+.profile__form-hr {
   margin: 0;
   padding: 0;
-  border: none;
+  opacity: 0.2;
+  border-top: 1px solid #000000;
+  height: 0;
 }
 
 .profile__form-job {
@@ -167,19 +248,20 @@
   font-size: 14px;
   line-height: calc((17/14)*100%);
   color: #000;
-  margin: 0;
+  margin: 30px 0 13px 0;
   padding: 0;
   border: none;
 }
 
 .profile__form-save-button {
   background-color: #000;
+  height: 50px;
   font-weight: 400;
   font-size: 18px;
   line-height: calc((22/18)*100%);
   text-align: center;
   color: #FFF;
-  margin: 0;
+  margin: 32px 36px 37px;
   padding: 0;
   border: none;
   border-radius: 2px;
@@ -191,15 +273,25 @@
   cursor: pointer;
 }
 
+@media screen and (max-width: 767px) {
+  .profile__form-save-button {
+    height: 46px;
+    margin: 45px 22px 25px;
+  }
+}
+
 .profile__form-close-button {
-  width: 0;
-  height: 0;
+  background-image: url(./images/Close\ Icon.svg);
+  background-color: #000;
+  background-size: contain;
+  width: 32px;
+  height: 32px;
   margin: 0;
   padding: 0;
   border: none;
   position: absolute;
-  top: -40px;
-  right: -8px;
+  top: -38px;
+  right: -38px;
   transition: opacity .1s linear;
 }
 
@@ -208,7 +300,16 @@
   cursor: pointer;
 }
 
+@media screen and (max-width: 767px) {
+  .profile__form-close-button {
+    width: 20px;
+    height: 20px;
+    top: -28px;
+    right: 0px;
+  }
+}
 
+/*==================================*/
 
 .elements {
   width: 100%;
@@ -307,6 +408,14 @@
   padding: 0;
   font-weight: 400;
   font-size: 18px;
-  line-height: calc((18/22)*100%) 22px;
+  line-height: calc((18/22)*100%);
   color: #545454;
+}
+
+@media screen and (max-width: 879px) {
+  .footer__text {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: calc((14/17)*100%);
+  }
 }
