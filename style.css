@@ -19,6 +19,21 @@
 @import url(./blocks/header/__logo/header__logo.css);
 @import url(./blocks/header/__line/header__line.css);
 
+/* Стили блока container */
+@import url(./blocks/container/container.css);
+
+/* Стили блока profile */
+@import url(./blocks/profile/profile.css);
+@import url(./blocks/profile/__main-container/profile__main-container.css);
+@import url(./blocks/profile/__info/profile__info.css);
+@import url(./blocks/profile/__final-container/profile__final-container.css);
+@import url(./blocks/profile/__name/profile__name.css);
+@import url(./blocks/profile/__edit-button/profile__edit-button.css);
+@import url(./blocks/profile/__job/profile__job.css);
+@import url(./blocks/profile/__add-button/profile__add-button.css);
+
+
+
 /* Стили блока elements и element */
 @import url(./blocks/elements/elements.css);
 @import url(./blocks/elements/__grid/elements__grid.css);
@@ -30,149 +45,7 @@
 @import url(./blocks/element/__button/element__button.css);
 @import url(./blocks/element/__button/_active/element__button_active.css);
 
-* {
-  outline: 1px solid red;
-  box-sizing: border-box;
-}
 
-.container {
-  max-width: 880px;
-  margin: 40px auto 66px;
-}
-
-@media screen and (max-width: 767px) {
-  .container {
-    margin: 42px auto 48px;
-  }
-}
-
-.profile {
-  max-width: 880px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 120px 1fr 150px;
-}
-
-@media screen and (max-width: 767px) {
-  .profile {
-    grid-template-columns: 1fr;
-    grid-template-rows: 120px 1fr 50px;
-    justify-items: center;
-    max-width: 282px;
-    margin: 0 auto 50px;
-  }
-}
-
-.profile__avatar {
-  width: 120px;
-  height: 120px;
-}
-
-.profile__info {
-  display: grid;
-  grid-template-areas: 'name edit-button''job job';
-  justify-content: start;
-  align-content: center;
-  align-items: center;
-}
-
-@media screen and (max-width: 767px) {
-  .profile__info {
-    margin-top: 26px;
-    margin-bottom: 36px;
-  }
-}
-
-.profile__name {
-  /* стили текста */
-  font-weight: 500;
-  font-size: 42px;
-  line-height: 114%;
-  margin: 0 18px 16px 30px;
-  padding: 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  /* остальные стили */
-  grid-area: name;
-}
-
-@media screen and (max-width: 767px) {
-  .profile__name {
-    font-weight: 500;
-    font-size: 27px;
-    line-height: calc((33/27)*100%);
-    text-align: center;
-    margin-right: 10px;
-  }
-}
-
-.profile__edit-button {
-  /* стили кнопки */
-  background-image: url(./images/Edit\ Button.svg);
-  background-size: contain;
-  border: none;
-  width: 24px;
-  height: 24px;
-  background-color: #000;
-  margin: 0;
-  padding: 0;
-  /* остальные стили */
-  grid-area: edit-button;
-  cursor: pointer;
-  transition: opacity .1s linear;
-}
-
-.profile__edit-button:hover {
-  opacity: .6;
-}
-
-@media screen and (max-width: 767px) {
-  .profile__edit-button {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-.profile__job {
-  /* стили текста */
-  font-weight: 400;
-  font-size: 18px;
-  line-height: calc((18/22)*100%);
-  margin: 0 0 0 30px;
-  padding: 0;
-  /* остальные стили */
-  grid-area: job;
-}
-
-@media screen and (max-width: 767px) {
-  .profile__job {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-    text-align: center;
-  }
-}
-
-.profile__add-button {
-  /* стили кнопки */
-  background-image: url(./images/Add\ Button.svg);
-  background-size: contain;
-  border: none;
-  width: 150px;
-  height: 50px;
-  background-color: #000;
-  margin: 0;
-  padding: 0;
-  /* остальные стили */
-  align-self: center;
-  transition: opacity .1s linear;
-  cursor: pointer;
-}
-
-.profile__add-button:hover {
-  opacity: .6;
-}
 
 /*==================================*/
 
@@ -272,7 +145,7 @@
   line-height: calc((22/18)*100%);
   text-align: center;
   color: #FFF;
-  margin: 32px 36px 37px;
+  margin: 32px 0 37px;
   padding: 0;
   border: none;
   border-radius: 2px;
@@ -287,13 +160,16 @@
 @media screen and (max-width: 767px) {
   .profile__form-save-button {
     height: 46px;
-    margin: 45px 22px 25px;
+    margin: 45px 0 25px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: calc((14/17)*100%);
   }
 }
 
 .profile__form-close-button {
   background-image: url(./images/Close\ Icon.svg);
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0);
   background-size: contain;
   width: 32px;
   height: 32px;
@@ -321,22 +197,6 @@
 }
 
 /*==================================*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .footer {
   max-width: 880px;
