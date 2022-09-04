@@ -1,0 +1,19 @@
+.popup__form {
+  position: absolute;
+  width: 430px;
+  height: 330px;
+  left: calc(50% - 430px/2);
+  top: 195px;
+  background: var(--white-color);
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 767px) {
+  .popup__form {
+    width: 282px;
+    height: 322px;
+    left: calc(50% - 282px/2);
+    top: 123px;
+  }
+}

@@ -1,8 +1,8 @@
-const overlay = document.querySelector('.form__overlay');
-let form = overlay.querySelector('.profile__form');
-let formName = overlay.querySelector('.profile__form-name');
-let formJob = overlay.querySelector('.profile__form-job');
-const closeButton = overlay.querySelector('.profile__form-close-button');
+const overlay = document.querySelector('.popup');
+let form = overlay.querySelector('.popup__form');
+let formName = overlay.querySelector('.popup__form-name');
+let formJob = overlay.querySelector('.popup__form-job');
+const closeButton = overlay.querySelector('.popup__form-close-button');
 
 const profile = document.querySelector('.profile');
 const profileEdit = profile.querySelector('.profile__edit-button');
