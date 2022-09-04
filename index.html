@@ -4,8 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Проектная работа Mesto Андрея Сапожникова на Яндекс.Практикуме">
+  <meta name="keywords" content="html5, css, adaptive, js">
   <title>Mesto</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./pages/index.css">
 </head>
 
 <body class="page">
@@ -16,43 +18,89 @@
   </header>
 
   <main class="container">
-
     <section class="profile">
-      <div class="profile__columns">
-        <div class="profile__left-column">
-
-          <img src="./images/Avatar.png" alt="Аватар" class="profile__avatar">
-
-          <div class="profile__info">
+      <div class="profile__main-container">
+        <img src="./images/Avatar.png" alt="Аватар" class="profile__avatar">
+        <div class="profile__info">
+          <div class="profile__final-container">
             <h1 class="profile__name">Жак-Ив Кусто</h1>
-            <button class="profile__edit-button">
-              <img src="images/Edit Button.svg" alt="Кнопка редактирования">
-            </button>
-            <p class="profile__job">Исследователь океана</p>
+            <button class="profile__edit-button"></button>
           </div>
-
+          <p class="profile__job">Исследователь океана</p>
         </div>
-
-        <button class="profile__add-button">
-          <img src="./images/Add Button.svg" alt="Кнопка добавления поста">
-        </button>
       </div>
 
-
-      <form class="profile__form">
-        <h2 class="profile__form-title">Редактировать профиль</h2>
-        <input type="text" name="name" id="name" value="" class="profile__form-name" required>
-        <input type="text" name="job" id="job" value="" class="profile__form-job">
-        <button type="submit" class="profile__form-button">Сохранить</button>
-        <button type="button" class="profile__form-button-close">
-          <img src="./images/Close Icon.svg" alt="Иконка Закрыть">
-        </button>
-      </form>
-
-
+      <button class="profile__add-button"></button>
+    </section>
+    
+    <section class="elements">
+      <ul class="elements__grid">
+        <li class="element">
+          <img src="./images/Baikal tinyfied.jpg" alt="Фото Байкала" class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Байкал</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+        <li class="element">
+          <img src="./images/Barcelona Spain tinyfied.jpg" alt="Фото Барселоны" class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Барселона</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+        <li class="element">
+          <img src="./images/Ex-Hacienda de Chautla, San Lucas el Grande, Mexico tinyfied.jpg" alt="Фото Мексика"
+            class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Мексика</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+        <li class="element">
+          <img src="./images/Lake Minnewanka tinyfied.jpg" alt="Озеро Минневанка в Канаде" class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Озеро Минневанка</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+        <li class="element">
+          <img src="./images/Mount Elbrus, Russia tinyfied.jpg" alt="Фото Эльбруса" class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Эльбрус</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+        <li class="element">
+          <img src="./images/Poon Hill, Ghode Pani, Nepal tinyfied.jpg" alt="Фото горы Пуун, Непал"
+            class="element__image">
+          <div class="element__group">
+            <h2 class="element__title">Непал</h2>
+            <button class="element__button" aria-label="Кнопка лайка"></button>
+          </div>
+        </li>
+      </ul>
     </section>
 
+    <section class="popup">
+      <form class="popup__form">
+        <h2 class="popup__form-title">Редактировать профиль</h2>
+
+        <input type="text" name="name" id="name" value="" class="popup__form-name" required>
+        <hr class="popup__border">
+
+        <input type="text" name="job" id="job" value="" class="popup__form-job">
+        <hr class="popup__border">
+
+        <button type="submit" class="popup__form-save-button">Сохранить</button>
+        <button type="button" class="popup__form-close-button"></button>
+      </form>
+    </section>
   </main>
+
+  <footer class="footer">
+    <p class="footer__text">&copy; 2020 Mesto Russia</p>
+  </footer>
 
   <script src="./index.js"></script>
 </body>
