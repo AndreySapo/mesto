@@ -1,49 +1,58 @@
-const overlay = document.querySelector('.popup');
-let form = overlay.querySelector('.popup__form');
-let formName = overlay.querySelector('.popup__form-name');
-let formJob = overlay.querySelector('.popup__form-job');
-// TODO Название переменных должно начинаться с существительного
-const closeButton = overlay.querySelector('.popup__form-close-button');
+// Код для формы
+// 1. Получаем необходимые объекты из DOM
+// 2. создаем 3 функции.
+//      открытие попапа с записью в инпуты информации из профайла
+//      закрытие попапа
+//      сохранение информации из инпута в профайл + закрытие попапа
+// 3. добавляем слушатели на нужные кнопки из первого пункта.
+// P.S. сохранение идет по submit, который вешается на форму
 
 const profile = document.querySelector('.profile');
-const profileEdit = profile.querySelector('.profile__edit-button');
 let profileName = profile.querySelector('.profile__name');
 let profileJob = profile.querySelector('.profile__job');
+const profileEditButton = profile.querySelector('.profile__edit-button');
 
-//слушатель на открытие формы
-// TODO В качестве второго параметра метода addEventListener следует использовать ранее объявленую функцию. 
-profileEdit.addEventListener('click', () => {
-  // TODO Управление стилями должно быть только в стилевых файлах. По заданию попап должен открываться при добавлении в класс модификатора.
-  overlay.setAttribute('style', 'display: block');
-  formName['value'] = profileName.textContent;
-  formJob['value'] = profileJob.textContent;
-})
+const popup = document.querySelector('.popup');
+const popupForm = popup.querySelector('.popup__form');
+let popupInputName = popup.querySelector('#name');
+let popupInputJob = popup.querySelector('#job');
+const popupCloseButton = popup.querySelector('.popup__button-close');
 
-//слушатель на закрытие формы
-// TODO В качестве второго параметра метода addEventListener следует использовать ранее объявленую функцию. 
-closeButton.addEventListener('click', () => {
-  // TODO Попап должен закрываться при удалении из класса модификатора
-  overlay.setAttribute('style', 'display: none');
-})
+function openPopup() {
+  popup.classList.toggle('popup_disable');
+  popupInputName.value = profileName.textContent;
+  popupInputJob.value = profileJob.textContent;
+}
 
-//слушатель на форму
-form.addEventListener('submit', (event) => {
-  // TODO объект event тут не нужен.
+function closePopup() {
+  popup.classList.toggle('popup_disable');
+}
+
+function saveToProfile(event) {
   event.preventDefault();
-  profileName.textContent = formName['value'];
-  profileJob.textContent = formJob['value'];
-  // TODO Необходимо избегать дублирования кода. Надо вызвать уже готовую функцию закрытия попап
-  overlay.setAttribute('style', 'display: none');
-} );
+  profileName.textContent = popupInputName.value;
+  profileJob.textContent = popupInputJob.value;
+}
 
-//на странице выбираем кнопки лайков
-// TODO Весь код, не относящийся к заданию, надо удалить или закомментировать
-const elements = document.querySelector('.elements__grid');
-// TODO Весь код, не относящийся к заданию, надо удалить или закомментировать
-let likeButtons = elements.querySelectorAll('.element__button');
+function saveAndClose(event) {
+  saveToProfile(event);
+  closePopup();
+}
 
-//для каждой кнопки лайка при нажатии добавляем/убираем класс element__button_active
-likeButtons.forEach(elem => {
-  // TODO Весь код, не относящийся к заданию, надо удалить или закомментировать
-  elem.addEventListener('click', () => elem.classList.toggle('element__button_active'))
-});
+profileEditButton.addEventListener('click', openPopup);
+popupCloseButton.addEventListener('click', closePopup);
+popupForm.addEventListener('submit', saveAndClose);
+
+// код для лайков
+// 1. Получаем массив кнопок из родительского для них элемента
+// 2. для каждого элемента из массива кнопок добавляем слушатель с нужной функцией
+// 3. нужная функция переключает нужный класс для кнопки
+
+// function toggleLike(event) {
+//   event.target.classList.toggle('element__button_active');
+// }
+
+// const elements = document.querySelector('.elements__grid');
+// let likeButtonsArray = elements.querySelectorAll('.element__button');
+
+// likeButtonsArray.forEach(button => button.addEventListener('click', toggleLike));

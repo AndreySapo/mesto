@@ -78,53 +78,23 @@
         </li>
       </ul>
     </section>
-
-    <!-- 
-      TODO
-      Так как попап по умолчанию закрыт, в разметку его лучше поместить после подвала, чтобы он не мешал  загрузке страницы
-      div
-     -->
-    <section class="popup">
-      <!-- 
-        TODO
-        1 Форма должна находиться в контейнере.
-        То есть, сам полупрозрачный - это попап, в нем белый контейнер, а в контейнере должна быть форма.
-        В одном контейнере может быть несколько форм.
-        2 у формы должен быть атрибут name. Он должен быть уникальным и не пустым среди всех форм в документе в HTML 5.
-        Подробнее об атрибутах для формы:
-        http://htmlbook.ru/html/form/method
-        http://htmlbook.ru/html/form/action
-        https://developer.mozilla.org/ru/docs/Web/HTML/Element/form
-       -->
-      <form class="popup__form">
-        <h2 class="popup__form-title">Редактировать профиль</h2>
-
-        <!-- 
-          TODO
-            у инпутов одинаковая стилизация, поэтому у них должен быть один общий класс. 
-            Для обращения к ним в скриптах необходимо прописывать модификаторы или id. 
-            Причем, раз нас интересуют значения инпутов, то модификаторы должны иметь вид ключ-значение 
-            (при этом надо помнить, что модификаторы нужны именно для скриптов, поэтому стилей у модификаторов быть не должно)
-            https://zaurmag.ru/html5-css3/metodologiya-bem.html
-            Если же пропишете id, то не забудьте именовать и использовать его правильно https://htmlacademy.ru/blog/boost/frontend/id-attribute
-         -->
-        <input type="text" name="name" id="name" value="" class="popup__form-name" required>
-        <!-- TODO Тег надо удалить -->
-        <hr class="popup__border">
-
-        <input type="text" name="job" id="job" value="" class="popup__form-job">
-        <!-- TODO Тег надо удалить -->
-        <hr class="popup__border">
-
-        <button type="submit" class="popup__form-save-button">Сохранить</button>
-        <button type="button" class="popup__form-close-button" aria-label="Кнопка Закрыть"></button>
-      </form>
-    </section>
   </main>
-
+  
   <footer class="footer">
     <p class="footer__text">&copy; 2020 Mesto Russia</p>
   </footer>
+  
+  <div class="popup popup_disable">
+    <div class="popup__container">
+      <form class="popup__form" name="edit profile">
+        <h2 class="popup__header">Редактировать профиль</h2>
+        <input type="text" id="name" name="name" value="" class="popup__input">
+        <input type="text" id="job" name="job" value="" class="popup__input">
+        <button type="submit" class="popup__button-save">Сохранить</button>
+        <button type="button" aria-label="Кнопка закрыть" class="popup__button-close"></button>
+      </form>
+    </div>
+  </div> 
 
   <script src="./scripts/index.js"></script>
 </body>
