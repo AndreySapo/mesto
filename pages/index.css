@@ -8,6 +8,7 @@
 /* Стили блока header */
 @import url(../blocks/header/header.css);
 @import url(../blocks/header/__logo/header__logo.css);
+/* Этой сущности нет в разметке. Файл, папку и подключение надо удалить */
 @import url(../blocks/header/__line/header__line.css);
 
 /* Стили блока container */
@@ -39,14 +40,22 @@
 
 /* Стили блока footer */
 @import url(../blocks/footer/footer.css);
+/* font-weight: 400; Удалите дубль стиля */
 @import url(../blocks/footer/__text/footer__text.css);
 
 /* Стили блока popup */
+/* Попап по умолчанию должен быть невидим */
 @import url(../blocks/popup/popup.css);
+/* При добавлении в класс модификатора попап, наоборот, должен открыться */
 @import url(../blocks/popup/_disable/popup_disable.css);
+/* 
+Необходимо удалить высоту у всех контентных и текстовых блоков. Для правильного расположения элементов необходимо применять технологию выравнивания (высоту строки, отступы) и построения сетки (флекс/грид) */
 @import url(../blocks/popup/__container/popup__container.css);
 @import url(../blocks/popup/__form/popup__form.css);
 @import url(../blocks/popup/__header/popup__header.css);
 @import url(../blocks/popup/__input/popup__input.css);
+/* 
+border-radius + opacity
+*/
 @import url(../blocks/popup/__button-save/popup__button-save.css);
 @import url(../blocks/popup/__button-close/popup__button-close.css);
