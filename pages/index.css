@@ -47,7 +47,7 @@
 /* Попап по умолчанию должен быть невидим */
 @import url(../blocks/popup/popup.css);
 /* При добавлении в класс модификатора попап, наоборот, должен открыться */
-@import url(../blocks/popup/_disable/popup_disable.css);
+@import url(../blocks/popup/_opened/popup_opened.css);
 /* 
 Необходимо удалить высоту у всех контентных и текстовых блоков. Для правильного расположения элементов необходимо применять технологию выравнивания (высоту строки, отступы) и построения сетки (флекс/грид) */
 @import url(../blocks/popup/__container/popup__container.css);
