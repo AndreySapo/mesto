@@ -1,6 +1,6 @@
 .popup__header {
   color: #000;
-  margin: 39px auto 52px 36px;
+  margin: 39px 36px 52px;
   padding: 0;
   font-weight: 900;
   font-size: 24px;
@@ -11,6 +11,6 @@
   .popup__header {
     font-size: 18px;
     line-height: calc((18/22)*100%);
-    margin: 30px 22px 77px;
+    margin: 30px 22px 78px;
   }
 }

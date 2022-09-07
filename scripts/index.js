@@ -19,13 +19,13 @@ let popupInputJob = popup.querySelector('#job');
 const popupCloseButton = popup.querySelector('.popup__button-close');
 
 function openPopup() {
-  popup.classList.toggle('popup_disable');
   popupInputName.value = profileName.textContent;
   popupInputJob.value = profileJob.textContent;
+  popup.classList.add('popup_opened');
 }
 
 function closePopup() {
-  popup.classList.toggle('popup_disable');
+  popup.classList.remove('popup_opened');
 }
 
 function saveToProfile(event) {
