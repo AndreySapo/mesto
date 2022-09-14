@@ -46,55 +46,66 @@ function defaultInputValue(popup) {
 // добавляем кнопкам слушатели
 // обязательно возвращаем html-код карточки
 function createCard(card) {
+  // поиск и копирование шаблона
   const cardTemplate = document.querySelector('#card-template').content;
   const cardTemplateClone = cardTemplate.cloneNode(true);
 
+  // из шаблона выбираем картинку и подпись
   const cardImage = cardTemplateClone.querySelector('.element__image');
   const cardTitle = cardTemplateClone.querySelector('.element__title');
 
+  // выбранным картинкам и подписям присваиваем значения из полученной карточки
   cardImage.src = card.link;
   cardImage.alt = card.name;
   cardTitle.textContent = card.name;
 
+  // из шаблона выбираем кнопки
   const cardLikeButton = cardTemplateClone.querySelector('.element__button-like');
   const cardTrashButton = cardTemplateClone.querySelector('.element__button-trash');
   const cardZoomButton = cardTemplateClone.querySelector('.element__button-zoom');
 
+  // функция изменения состояния кнопки лайка
   function toggleLike(event) {
     event.target.classList.toggle('element__button-like_active');
   }
 
+  // функция удаления карточки из списка карточек
   function deleteElement() {
     const listItem = cardTrashButton.closest('.element');
     listItem.remove();
   }
 
+  // слушатели кнопок
   cardLikeButton.addEventListener('click', toggleLike);
   cardTrashButton.addEventListener('click', deleteElement);
 
+  // задаем элементы попапа картинки
   const popupZoom = document.querySelector('.img-zoom');
   const imagePopupZoom = popupZoom.querySelector('.img-zoom__img');
   const captionPopupZoom = popupZoom.querySelector('.img-zoom__caption');
   const buttonClosePopupZoom = popupZoom.querySelector('.img-zoom__button-close');
 
-
+  // присваиваем нужные значения в попап картинки
   function copyToPopupZoom() {
     imagePopupZoom.src = card.link;
     imagePopupZoom.alt = card.name;
     captionPopupZoom.textContent = card.name;
   }
 
+  // слушатель на кнопку попапа картинки
   cardZoomButton.addEventListener('click', () => {
     copyToPopupZoom();
     openPopup(popupZoom);
   });
 
+  // сброс значений для попапа картинки
   function defaultZoomValue() {
     imagePopupZoom.src = '';
     imagePopupZoom.alt = '';
     captionPopupZoom.textContent = '';
   }
 
+  // слушатель кнопки закрытия попапа картинки
   buttonClosePopupZoom.addEventListener('click', () => {
     closePopup(popupZoom);
     defaultZoomValue();

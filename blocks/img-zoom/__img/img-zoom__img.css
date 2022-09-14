@@ -5,10 +5,3 @@
   height: 100%;
   display: block;
 }
-
-@media screen and (max-width: 767px) {
-  .img-zoom__img {
-    max-width: 100%;
-    max-height: 100%;
-  }
-}
