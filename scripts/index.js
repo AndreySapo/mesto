@@ -22,6 +22,12 @@ const newPostPopupPlace = newPostPopup.querySelector('#place');
 const newPostPopupPicture = newPostPopup.querySelector('#picture');
 const newPostPopupCloseButton = newPostPopup.querySelector('.popup__button-close');
 
+// переменные для img-zoom
+const imgZoomPopup = document.querySelector('.img-zoom');
+const imageImgZoomPopup = imgZoomPopup.querySelector('.img-zoom__img');
+const captionImgZoomPopup = imgZoomPopup.querySelector('.img-zoom__caption');
+const imgZoomPopupButtonClose = imgZoomPopup.querySelector('.popup__button-close');
+
 // функция открытия ЛЮБОГО попапа
 function openPopup(popup) {
   popup.classList.add('popup_opened');
@@ -32,29 +38,16 @@ function closePopup(popup) {
   popup.classList.remove('popup_opened');
 }
 
-// функция обнуления инпутов в ЛЮБОМ попапе
-function defaultInputValue(popup) {
-  arrayOfInputs = popup.querySelectorAll('.popup__input');
-  arrayOfInputs.forEach(element => { element.value = '' });
-}
-
-// функция создания карточки
-// принимает на вход объект карточки
-// берем ноду темплейта карточки, копируем её, нужным элементам
-// присваиваем необходимые для отображения значения
-// создаем кнопки лайка, удаления и зума
-// добавляем кнопкам слушатели
-// обязательно возвращаем html-код карточки
-function createCard(card) {
-  // поиск и копирование шаблона
+function addCard(card) {
+  // поиск и копирование шаблона 
   const cardTemplate = document.querySelector('#card-template').content;
   const cardTemplateClone = cardTemplate.cloneNode(true);
 
-  // из шаблона выбираем картинку и подпись
+  // из шаблона выбираем картинку и подпись 
   const cardImage = cardTemplateClone.querySelector('.element__image');
   const cardTitle = cardTemplateClone.querySelector('.element__title');
 
-  // выбранным картинкам и подписям присваиваем значения из полученной карточки
+  // выбранным картинкам и подписям присваиваем значения из полученной карточки 
   cardImage.src = card.link;
   cardImage.alt = card.name;
   cardTitle.textContent = card.name;
@@ -74,129 +67,87 @@ function createCard(card) {
     const listItem = cardTrashButton.closest('.element');
     listItem.remove();
   }
+  
+  // присваиваем нужные значения в попап картинки
+  function copyToPopupZoom() {
+    imageImgZoomPopup.src = card.link;
+    imageImgZoomPopup.alt = card.name;
+    captionImgZoomPopup.textContent = card.name;
+  }
 
   // слушатели кнопок
   cardLikeButton.addEventListener('click', toggleLike);
   cardTrashButton.addEventListener('click', deleteElement);
-
-  // задаем элементы попапа картинки
-  const popupZoom = document.querySelector('.img-zoom');
-  const imagePopupZoom = popupZoom.querySelector('.img-zoom__img');
-  const captionPopupZoom = popupZoom.querySelector('.img-zoom__caption');
-  const buttonClosePopupZoom = popupZoom.querySelector('.img-zoom__button-close');
-
-  // присваиваем нужные значения в попап картинки
-  function copyToPopupZoom() {
-    imagePopupZoom.src = card.link;
-    imagePopupZoom.alt = card.name;
-    captionPopupZoom.textContent = card.name;
-  }
-
-  // слушатель на кнопку попапа картинки
   cardZoomButton.addEventListener('click', () => {
     copyToPopupZoom();
-    openPopup(popupZoom);
+    openPopup(imgZoomPopup);
   });
 
-  // сброс значений для попапа картинки
-  function defaultZoomValue() {
-    imagePopupZoom.src = '';
-    imagePopupZoom.alt = '';
-    captionPopupZoom.textContent = '';
-  }
-
-  // слушатель кнопки закрытия попапа картинки
-  buttonClosePopupZoom.addEventListener('click', () => {
-    closePopup(popupZoom);
-    defaultZoomValue();
-  });
-
-  return cardTemplateClone;
+  return cardTemplateClone
 }
 
-// функция создания первых карточек
-// получает карточку и добавляет полученную из функции createCard карточку
-// в конец списка карточек
-function createFirstCards(card) {
-  cardsContainer.append(createCard(card));
-}
-
-// функция передачи контента из профайла в попап
-function sendToInput() {
+// функция переноса из профайла в попап
+function fillProfileInputs() {
   profilePopupName.value = profileName.textContent;
   profilePopupJob.value = profileJob.textContent;
 }
 
-// функция сохранения контента из попапа в профайл
-function saveToProfile(event) {
+function savePopupToProfile(event) {
   event.preventDefault();
   profileName.textContent = profilePopupName.value;
   profileJob.textContent = profilePopupJob.value;
 }
 
-// функция добавления новой карточки
-// генерируем объект карточки из полученных значений от пользователя
-// передаем карточку в функцию создания карточки и добавляем её
-// в начало списка карточек
-function addCard(event) {
-  event.preventDefault();
+function makeCard() {
 
   const card = {
-    name: newPostPopupPlace.value,
-    link: newPostPopupPicture.value
+    name : newPostPopupPlace.value,
+    link : newPostPopupPicture.value
   }
 
-  cardsContainer.prepend(createCard(card));
+  return card
 }
 
-// вызовы функций
-// для каждой карточки из списка начальных карточек выполнить функцию создания карточки одна за одной
-initialCards.forEach(createFirstCards);
-
-// слушатель кнопки редактирования профиля
-// сначала передаем данные в инпуты, потом открываем попап
+// по кнопке редактирования профиля открыть попап редактирования профиля
 profileEditButton.addEventListener('click', () => {
-  sendToInput();
   openPopup(profilePopup);
+  fillProfileInputs();
 });
 
-// слушатель кнопки сохранения данных из попапа в профайл
-// сохраняем=>закрываем=>очищаем инпуты
-profilePopupForm.addEventListener('submit', () => {
-  saveToProfile(event);
+// сабмит + закрытие попапа редактирования профиля
+profilePopupForm.addEventListener('submit', (event) => {
+  savePopupToProfile(event);
   closePopup(profilePopup);
-  defaultInputValue(profilePopup);
 });
 
-// слушатель кнопки закрытия попапа
-// закрываем=>очищаем инпуты
-profilePopupCloseButton.addEventListener('click', () => {
-  closePopup(profilePopup);
-  defaultInputValue(profilePopup);
+// находим все крестики проекта по универсальному селектору
+const closeButtons = document.querySelectorAll('.popup__button-close');
+
+closeButtons.forEach((button) => {
+  // находим 1 раз ближайший к крестику попап 
+  const popup = button.closest('.popup');
+  // устанавливаем обработчик закрытия на крестик
+  button.addEventListener('click', () => closePopup(popup));
 });
 
-// слушатель кнопки открытия попапа профайла
+// по кнопке добавления поста открыть попап добавления поста
 profileAddButton.addEventListener('click', () => {
   openPopup(newPostPopup);
 });
 
-// слушатель кнопки закрытия попапа нового поста
-// закрываем попап=>очищаем инпуты
-newPostPopupCloseButton.addEventListener('click', () => {
+// сабмит+закрытие попапа добавления поста
+newPostPopupForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  cardsContainer.prepend(addCard(makeCard()));
   closePopup(newPostPopup);
-  defaultInputValue(newPostPopup);
 });
 
-// тестовая карточка
-// Ангарск
-// https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Angarsk_car_Volga_GAZ-21_%2825720495842%29.jpg/1920px-Angarsk_car_Volga_GAZ-21_%2825720495842%29.jpg
-// Карачаево-Черкессия
-// ./images/Image.jpg
+// создание изначальных карточек
+initialCards.forEach(element => {
+  cardsContainer.append(addCard(element));
+});
 
-// слушатель кнопки создания нового поста
-// добавляем карточку=>закрываем попап=>очищаем инпуты
-newPostPopupForm.addEventListener('submit', () => {
-  addCard(event);
-  closePopup(newPostPopup);
-  defaultInputValue(newPostPopup);
-})
+// тестовая карточка 
+
+// Ангарск 
+// https://bit.ly/3xqAYRg
