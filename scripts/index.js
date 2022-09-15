@@ -140,6 +140,7 @@ newPostPopupForm.addEventListener('submit', (event) => {
   event.preventDefault();
   cardsContainer.prepend(addCard(makeCard()));
   closePopup(newPostPopup);
+  event.target.reset();
 });
 
 // создание изначальных карточек
