@@ -43,7 +43,7 @@
   
   <div class="popup profile-popup">
     <div class="popup__container">
-      <form class="popup__form" name="edit profile" novalidate>
+      <form class="popup__form" name="user" novalidate>
 
         <h2 class="popup__header">Редактировать профиль</h2>
 
@@ -57,22 +57,33 @@
           maxlength="40"
           required
         >
-        <span class=""></span>
+        <span class="form__input-error name-error"></span>
 
         <input
           type="text"
-          id="job" name="job"
+          id="job"
+          name="job"
           value=""
           class="popup__input"
           minlength="2"
           maxlength="200"
           required
         >
-        <span class=""></span>
+        <span class="form__input-error job-error"></span>
 
 
-        <button type="submit" class="popup__button-save">Сохранить</button>
-        <button type="button" aria-label="Кнопка закрыть" class="popup__button-close"></button>
+        <button
+          type="submit"
+          class="popup__button-save"
+        >
+          Сохранить
+        </button>
+
+        <button
+          type="button"
+          aria-label="Кнопка закрыть"
+          class="popup__button-close"
+        ></button>
 
       </form>
     </div>
@@ -95,6 +106,7 @@
           maxlength="30"
           required
         >
+        <span class="form__input-error place-error"></span>
 
         <input
           type="url"
@@ -105,10 +117,20 @@
           class="popup__input"
           required
         >
+        <span class="form__input-error picture-error"></span>
 
-        <button type="submit" class="popup__button-save">Создать</button>
+        <button
+          type="submit"
+          class="popup__button-save"
+        >
+          Создать
+        </button>
 
-        <button type="button" aria-label="Кнопка закрыть" class="popup__button-close"></button>
+        <button
+          type="button"
+          aria-label="Кнопка закрыть"
+          class="popup__button-close"
+        ></button>
 
       </form>
     </div>
@@ -137,6 +159,7 @@
 
   <script src="./scripts/cards.js"></script>
   <script src="./scripts/index.js"></script>
+  <script src="./scripts/validate.js"></script>
 </body>
 
 </html>

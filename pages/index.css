@@ -56,3 +56,29 @@
 @import url(../blocks/img-zoom/__img/img-zoom__img.css);
 @import url(../blocks/img-zoom/__caption/img-zoom__caption.css);
 @import url(../blocks/img-zoom/__button-close/img-zoom__button-close.css);
+
+.popup__input_type_error {
+  border-bottom-color: #FF0000;
+}
+
+.popup__input-error_active {
+  color: #FF0000;
+  margin-left: 36px;
+  margin-top: 5px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: calc((12/15)*100%);
+  visibility: hidden;
+}
+
+.popup__input-error_active {
+  visibility: visible;
+}
+
+.popup__button-save_inactive {
+  border: 1px solid #000;
+  border-radius: 2px;
+  color: #000;
+  background-color: #fff;
+  opacity: .2;
+}
