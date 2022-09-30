@@ -152,3 +152,11 @@ initialCards.forEach(element => {
 
 // Ангарск 
 // https://bit.ly/3xqAYRg
+
+
+const formElement = document.querySelector('.popup__form');
+const formInput = formElement.querySelector('.popup__input');
+
+formInput.addEventListener('input', function (evt) {
+  console.log(evt.target.validity.valid);
+});
