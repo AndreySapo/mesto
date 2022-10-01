@@ -67,7 +67,7 @@ function addCard(card) {
     const listItem = cardTrashButton.closest('.element');
     listItem.remove();
   }
-  
+
   // присваиваем нужные значения в попап картинки
   function copyToPopupZoom() {
     imageImgZoomPopup.src = card.link;
@@ -101,8 +101,8 @@ function savePopupToProfile(event) {
 function makeCard() {
 
   const card = {
-    name : newPostPopupPlace.value,
-    link : newPostPopupPicture.value
+    name: newPostPopupPlace.value,
+    link: newPostPopupPicture.value
   }
 
   return card
@@ -148,7 +148,7 @@ initialCards.forEach(element => {
   cardsContainer.append(addCard(element));
 });
 
-// тестовая карточка 
+// тестовая карточка
 
-// Ангарск 
+// Ангарск
 // https://bit.ly/3xqAYRg

@@ -48,7 +48,11 @@
 @import url(../blocks/popup/__form/popup__form.css);
 @import url(../blocks/popup/__header/popup__header.css);
 @import url(../blocks/popup/__input/popup__input.css);
+@import url(../blocks/popup/__input/_type/popup__input_type_error.css);
+@import url(../blocks/popup/__input-error/popup__input-error.css);
+@import url(../blocks/popup/__input-error/_active/popup__input-error_active.css);
 @import url(../blocks/popup/__button-save/popup__button-save.css);
+@import url(../blocks/popup/__button-save/_inactive/popup__button-save_inactive.css);
 @import url(../blocks/popup/__button-close/popup__button-close.css);
 
 /* Стили блока img-zoom*/
@@ -57,28 +61,9 @@
 @import url(../blocks/img-zoom/__caption/img-zoom__caption.css);
 @import url(../blocks/img-zoom/__button-close/img-zoom__button-close.css);
 
-.popup__input_type_error {
-  border-bottom-color: #FF0000;
-}
 
-.popup__input-error_active {
-  color: #FF0000;
-  margin-left: 36px;
-  margin-top: 5px;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: calc((12/15)*100%);
-  visibility: hidden;
-}
 
-.popup__input-error_active {
-  visibility: visible;
-}
 
-.popup__button-save_inactive {
-  border: 1px solid #000;
-  border-radius: 2px;
-  color: #000;
-  background-color: #fff;
-  opacity: .2;
-}
+
+
+
