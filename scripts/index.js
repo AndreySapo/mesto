@@ -28,14 +28,39 @@ const imageImgZoomPopup = imgZoomPopup.querySelector('.img-zoom__img');
 const captionImgZoomPopup = imgZoomPopup.querySelector('.img-zoom__caption');
 const imgZoomPopupButtonClose = imgZoomPopup.querySelector('.popup__button-close');
 
-// функция открытия ЛЮБОГО попапа
-function openPopup(popup) {
-  popup.classList.add('popup_opened');
-}
-
 // функция закрытия ЛЮБОГО попапа
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+}
+
+// функция слушателей кнопки esc и щелчка по оверлею
+function closeByEscapeOrClick(popup) {
+  document.addEventListener('keyup', (evt) => {
+    if (evt.key === `Escape`) {
+      closePopup(popup);
+    }
+  });
+  document.removeEventListener('keyup', (evt) => {
+    if (evt.key === `Escape`) {
+      closePopup(popup);
+    }
+  });
+  document.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('popup')) {
+      closePopup(popup);
+    }
+  });
+  document.removeEventListener('click', (evt) => {
+    if (evt.target.classList.contains('popup')) {
+      closePopup(popup);
+    }
+  });
+}
+
+// функция открытия ЛЮБОГО попапа
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+  closeByEscapeOrClick(popup);
 }
 
 function addCard(card) {
@@ -121,9 +146,9 @@ profilePopupForm.addEventListener('submit', (event) => {
 });
 
 // находим все крестики проекта по универсальному селектору
-const closeButtons = document.querySelectorAll('.popup__button-close');
+const buttonsClose = document.querySelectorAll('.popup__button-close');
 
-closeButtons.forEach((button) => {
+buttonsClose.forEach((button) => {
   // находим 1 раз ближайший к крестику попап 
   const popup = button.closest('.popup');
   // устанавливаем обработчик закрытия на крестик
