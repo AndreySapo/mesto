@@ -20,6 +20,7 @@ const newPostPopup = document.querySelector('.new-post-popup');
 const newPostPopupForm = newPostPopup.querySelector('.popup__form');
 const newPostPopupPlace = newPostPopup.querySelector('#place');
 const newPostPopupPicture = newPostPopup.querySelector('#picture');
+const newPostPopupSaveButton = newPostPopup.querySelector('.popup__button-save');
 const newPostPopupCloseButton = newPostPopup.querySelector('.popup__button-close');
 
 // переменные для img-zoom
@@ -31,36 +32,31 @@ const imgZoomPopupButtonClose = imgZoomPopup.querySelector('.popup__button-close
 // функция закрытия ЛЮБОГО попапа
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeByEscapeOrClick);
+  document.removeEventListener('click', closeByEscapeOrClick);
 }
 
 // функция слушателей кнопки esc и щелчка по оверлею
-function closeByEscapeOrClick(popup) {
-  document.addEventListener('keyup', (evt) => {
-    if (evt.key === `Escape`) {
-      closePopup(popup);
-    }
-  });
-  document.removeEventListener('keyup', (evt) => {
-    if (evt.key === `Escape`) {
-      closePopup(popup);
-    }
-  });
-  document.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('popup')) {
-      closePopup(popup);
-    }
-  });
-  document.removeEventListener('click', (evt) => {
-    if (evt.target.classList.contains('popup')) {
-      closePopup(popup);
-    }
-  });
+function closeByEscapeOrClick(evt) {
+  // если esc, то находим открытый попап и закрываем его
+  if (evt.key === 'Escape') {
+    const currentPopup = document.querySelector('.popup_opened');
+    closePopup(currentPopup);
+  }
+
+  // если клик по оверлею - то находим открытый попап и закрываем его
+  if (evt.target.classList.contains('popup')) {
+    const currentPopup = document.querySelector('.popup_opened');
+    closePopup(currentPopup);
+  }
 }
 
 // функция открытия ЛЮБОГО попапа
 function openPopup(popup) {
   popup.classList.add('popup_opened');
-  closeByEscapeOrClick(popup);
+  // добавляем два слушателя, на клик и на клавишу
+  document.addEventListener('keydown', closeByEscapeOrClick);
+  document.addEventListener('click', closeByEscapeOrClick);
 }
 
 function addCard(card) {
@@ -166,6 +162,8 @@ newPostPopupForm.addEventListener('submit', (event) => {
   cardsContainer.prepend(addCard(makeCard()));
   closePopup(newPostPopup);
   event.target.reset();
+  newPostPopupSaveButton.classList.add('popup__button-save_inactive');
+  newPostPopupSaveButton.setAttribute('disabled', true);
 });
 
 // создание изначальных карточек
