@@ -59,52 +59,54 @@ function openPopup(popup) {
   document.addEventListener('click', closeByEscapeOrClick);
 }
 
-function addCard(card) {
-  // поиск и копирование шаблона 
-  const cardTemplate = document.querySelector('#card-template').content;
-  const cardTemplateClone = cardTemplate.cloneNode(true);
+class Card {
+  constructor(data, template) { //в конструктор передаем объект данных, где содержится имя и ссылка на картинку. и ещё передаем название шаблона
+    // поиск и копирование шаблона 
+    const _cardTemplate = document.querySelector(template).content;
+    const cardTemplateClone = _cardTemplate.cloneNode(true);
 
-  // из шаблона выбираем картинку и подпись 
-  const cardImage = cardTemplateClone.querySelector('.element__image');
-  const cardTitle = cardTemplateClone.querySelector('.element__title');
+    // из шаблона выбираем картинку и подпись 
+    const _cardImage = cardTemplateClone.querySelector('.element__image');
+    const _cardTitle = cardTemplateClone.querySelector('.element__title');
 
-  // выбранным картинкам и подписям присваиваем значения из полученной карточки 
-  cardImage.src = card.link;
-  cardImage.alt = card.name;
-  cardTitle.textContent = card.name;
+    // выбранным картинкам и подписям присваиваем значения из полученной карточки 
+    _cardImage.src = data.link;
+    _cardImage.alt = data.name;
+    _cardTitle.textContent = data.name;
 
-  // из шаблона выбираем кнопки
-  const cardLikeButton = cardTemplateClone.querySelector('.element__button-like');
-  const cardTrashButton = cardTemplateClone.querySelector('.element__button-trash');
-  const cardZoomButton = cardTemplateClone.querySelector('.element__button-zoom');
+    // из шаблона выбираем кнопки
+    const _cardLikeButton = cardTemplateClone.querySelector('.element__button-like');
+    const _cardTrashButton = cardTemplateClone.querySelector('.element__button-trash');
+    const _cardZoomButton = cardTemplateClone.querySelector('.element__button-zoom');
+
+    // слушатели кнопок
+    _cardLikeButton.addEventListener('click', this._toggleLike);
+    _cardTrashButton.addEventListener('click', this._deleteElement);
+    _cardZoomButton.addEventListener('click', () => {
+      this._copyToPopupZoom();
+      openPopup(imgZoomPopup);
+    });
+
+    return cardTemplateClone
+  }
 
   // функция изменения состояния кнопки лайка
-  function toggleLike(event) {
+  _toggleLike = function (event) {
     event.target.classList.toggle('element__button-like_active');
   }
 
   // функция удаления карточки из списка карточек
-  function deleteElement() {
-    const listItem = cardTrashButton.closest('.element');
+  _deleteElement = function (event) {
+    const listItem = event.target.parentElement;
     listItem.remove();
   }
 
   // присваиваем нужные значения в попап картинки
-  function copyToPopupZoom() {
-    imageImgZoomPopup.src = card.link;
-    imageImgZoomPopup.alt = card.name;
-    captionImgZoomPopup.textContent = card.name;
+  _copyToPopupZoom() {
+    imageImgZoomPopup.src = this.data.link;
+    imageImgZoomPopup.alt = this.data.name;
+    captionImgZoomPopup.textContent = this.data.name;
   }
-
-  // слушатели кнопок
-  cardLikeButton.addEventListener('click', toggleLike);
-  cardTrashButton.addEventListener('click', deleteElement);
-  cardZoomButton.addEventListener('click', () => {
-    copyToPopupZoom();
-    openPopup(imgZoomPopup);
-  });
-
-  return cardTemplateClone
 }
 
 // функция переноса из профайла в попап
@@ -119,6 +121,7 @@ function savePopupToProfile(event) {
   profileJob.textContent = profilePopupJob.value;
 }
 
+//создаем объект карточки из полученных данных
 function makeCard() {
 
   const card = {
@@ -159,7 +162,7 @@ profileAddButton.addEventListener('click', () => {
 // сабмит+закрытие попапа добавления поста
 newPostPopupForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  cardsContainer.prepend(addCard(makeCard()));
+  cardsContainer.prepend(new Card(makeCard(), '#card-template'));
   closePopup(newPostPopup);
   event.target.reset();
   newPostPopupSaveButton.classList.add('popup__button-save_inactive');
@@ -168,7 +171,7 @@ newPostPopupForm.addEventListener('submit', (event) => {
 
 // создание изначальных карточек
 initialCards.forEach(element => {
-  cardsContainer.append(addCard(element));
+  cardsContainer.append(new Card(element, '#card-template'));
 });
 
 // тестовая карточка
