@@ -83,7 +83,7 @@ class Card {
     _cardLikeButton.addEventListener('click', this._toggleLike);
     _cardTrashButton.addEventListener('click', this._deleteElement);
     _cardZoomButton.addEventListener('click', () => {
-      this._copyToPopupZoom();
+      this._copyToPopupZoom(data);
       openPopup(imgZoomPopup);
     });
 
@@ -102,10 +102,10 @@ class Card {
   }
 
   // присваиваем нужные значения в попап картинки
-  _copyToPopupZoom() {
-    imageImgZoomPopup.src = this.data.link;
-    imageImgZoomPopup.alt = this.data.name;
-    captionImgZoomPopup.textContent = this.data.name;
+  _copyToPopupZoom(data) {
+    imageImgZoomPopup.src = data.link;
+    imageImgZoomPopup.alt = data.name;
+    captionImgZoomPopup.textContent = data.name;
   }
 }
 
