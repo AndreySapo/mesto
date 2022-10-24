@@ -1,3 +1,11 @@
+import initialCards from "./cards.js";
+import Card from "./Card.js";
+import FormValidator from "./FormValidator.js";
+
+// тестовая карточка
+// Ангарск
+// https://bit.ly/3xqAYRg
+
 // место куда вставлять темплейт с карточками
 const cardsContainer = document.querySelector('.elements__grid');
 
@@ -13,7 +21,6 @@ const profilePopup = document.querySelector('.profile-popup');
 const profilePopupForm = profilePopup.querySelector('.popup__form');
 const profilePopupName = profilePopup.querySelector('#name');
 const profilePopupJob = profilePopup.querySelector('#job');
-const profilePopupCloseButton = profilePopup.querySelector('.popup__button-close');
 
 // переменные для new-post-popup
 const newPostPopup = document.querySelector('.new-post-popup');
@@ -21,13 +28,8 @@ const newPostPopupForm = newPostPopup.querySelector('.popup__form');
 const newPostPopupPlace = newPostPopup.querySelector('#place');
 const newPostPopupPicture = newPostPopup.querySelector('#picture');
 const newPostPopupSaveButton = newPostPopup.querySelector('.popup__button-save');
-const newPostPopupCloseButton = newPostPopup.querySelector('.popup__button-close');
 
-// переменные для img-zoom
-const imgZoomPopup = document.querySelector('.img-zoom');
-const imageImgZoomPopup = imgZoomPopup.querySelector('.img-zoom__img');
-const captionImgZoomPopup = imgZoomPopup.querySelector('.img-zoom__caption');
-const imgZoomPopupButtonClose = imgZoomPopup.querySelector('.popup__button-close');
+
 
 // функция закрытия ЛЮБОГО попапа
 function closePopup(popup) {
@@ -59,53 +61,7 @@ function openPopup(popup) {
   document.addEventListener('click', closeByEscapeOrClick);
 }
 
-function addCard(card) {
-  // поиск и копирование шаблона 
-  const cardTemplate = document.querySelector('#card-template').content;
-  const cardTemplateClone = cardTemplate.cloneNode(true);
-
-  // из шаблона выбираем картинку и подпись 
-  const cardImage = cardTemplateClone.querySelector('.element__image');
-  const cardTitle = cardTemplateClone.querySelector('.element__title');
-
-  // выбранным картинкам и подписям присваиваем значения из полученной карточки 
-  cardImage.src = card.link;
-  cardImage.alt = card.name;
-  cardTitle.textContent = card.name;
-
-  // из шаблона выбираем кнопки
-  const cardLikeButton = cardTemplateClone.querySelector('.element__button-like');
-  const cardTrashButton = cardTemplateClone.querySelector('.element__button-trash');
-  const cardZoomButton = cardTemplateClone.querySelector('.element__button-zoom');
-
-  // функция изменения состояния кнопки лайка
-  function toggleLike(event) {
-    event.target.classList.toggle('element__button-like_active');
-  }
-
-  // функция удаления карточки из списка карточек
-  function deleteElement() {
-    const listItem = cardTrashButton.closest('.element');
-    listItem.remove();
-  }
-
-  // присваиваем нужные значения в попап картинки
-  function copyToPopupZoom() {
-    imageImgZoomPopup.src = card.link;
-    imageImgZoomPopup.alt = card.name;
-    captionImgZoomPopup.textContent = card.name;
-  }
-
-  // слушатели кнопок
-  cardLikeButton.addEventListener('click', toggleLike);
-  cardTrashButton.addEventListener('click', deleteElement);
-  cardZoomButton.addEventListener('click', () => {
-    copyToPopupZoom();
-    openPopup(imgZoomPopup);
-  });
-
-  return cardTemplateClone
-}
+export { openPopup }
 
 // функция переноса из профайла в попап
 function fillProfileInputs() {
@@ -119,6 +75,7 @@ function savePopupToProfile(event) {
   profileJob.textContent = profilePopupJob.value;
 }
 
+//создаем объект карточки из полученных данных
 function makeCard() {
 
   const card = {
@@ -159,19 +116,34 @@ profileAddButton.addEventListener('click', () => {
 // сабмит+закрытие попапа добавления поста
 newPostPopupForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  cardsContainer.prepend(addCard(makeCard()));
+  cardsContainer.prepend(new Card(makeCard(), '#card-template'));
   closePopup(newPostPopup);
   event.target.reset();
   newPostPopupSaveButton.classList.add('popup__button-save_inactive');
   newPostPopupSaveButton.setAttribute('disabled', true);
 });
 
-// создание изначальных карточек
+// создание изначальных карточек путем создания новой разметки на основе класса
 initialCards.forEach(element => {
-  cardsContainer.append(addCard(element));
+  cardsContainer.append(new Card(element, '#card-template'));
 });
 
-// тестовая карточка
 
-// Ангарск
-// https://bit.ly/3xqAYRg
+// код для валидации
+// объект настроек, то, что нужно валидировать
+const settings = {
+  inputSelector: '.popup__input',
+  buttonSelector: '.popup__button-save',
+  inactiveButtonClass: 'popup__button-save_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active'
+}
+
+// массив из всех форм на странице
+const formList = Array.from(document.forms);
+
+// для каждого элемента из массива форм создаем новый объект из класса и используем его публичный метод включения валидации
+formList.forEach((formElement) => {
+  const form = new FormValidator(settings, formElement);
+  form.enableValidation();
+});
