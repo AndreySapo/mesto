@@ -1,4 +1,10 @@
+import initialCards from "./cards.js";
 import Card from "./Card.js";
+import FormValidator from "./FormValidator.js";
+
+// тестовая карточка
+// Ангарск
+// https://bit.ly/3xqAYRg
 
 // место куда вставлять темплейт с карточками
 const cardsContainer = document.querySelector('.elements__grid');
@@ -117,12 +123,27 @@ newPostPopupForm.addEventListener('submit', (event) => {
   newPostPopupSaveButton.setAttribute('disabled', true);
 });
 
-// создание изначальных карточек
+// создание изначальных карточек путем создания новой разметки на основе класса
 initialCards.forEach(element => {
   cardsContainer.append(new Card(element, '#card-template'));
 });
 
-// тестовая карточка
 
-// Ангарск
-// https://bit.ly/3xqAYRg
+// код для валидации
+// объект настроек, то, что нужно валидировать
+const settings = {
+  inputSelector: '.popup__input',
+  buttonSelector: '.popup__button-save',
+  inactiveButtonClass: 'popup__button-save_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active'
+}
+
+// массив из всех форм на странице
+const formList = Array.from(document.forms);
+
+// для каждого элемента из массива форм создаем новый объект из класса и используем его публичный метод включения валидации
+formList.forEach((formElement) => {
+  const form = new FormValidator(settings, formElement);
+  form.enableValidation();
+});

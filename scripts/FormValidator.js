@@ -1,8 +1,7 @@
-class FormValidation {
+class FormValidator {
   constructor(settingsObject, formElement) {
     this.settingsObject = settingsObject;
     this.formElement = formElement;
-    this.enableValidation();
   }
 
   enableValidation() {
@@ -62,16 +61,4 @@ class FormValidation {
   }
 }
 
-const settings = {
-  inputSelector: '.popup__input',
-  buttonSelector: '.popup__button-save',
-  inactiveButtonClass: 'popup__button-save_inactive',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__input-error_active'
-}
-
-const formList = Array.from(document.forms);
-
-formList.forEach((formElement) => {
-  new FormValidation(settings, formElement);
-});
+export default FormValidator;
