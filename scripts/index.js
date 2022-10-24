@@ -1,3 +1,5 @@
+import Card from "./Card.js";
+
 // место куда вставлять темплейт с карточками
 const cardsContainer = document.querySelector('.elements__grid');
 
@@ -13,7 +15,6 @@ const profilePopup = document.querySelector('.profile-popup');
 const profilePopupForm = profilePopup.querySelector('.popup__form');
 const profilePopupName = profilePopup.querySelector('#name');
 const profilePopupJob = profilePopup.querySelector('#job');
-const profilePopupCloseButton = profilePopup.querySelector('.popup__button-close');
 
 // переменные для new-post-popup
 const newPostPopup = document.querySelector('.new-post-popup');
@@ -21,13 +22,8 @@ const newPostPopupForm = newPostPopup.querySelector('.popup__form');
 const newPostPopupPlace = newPostPopup.querySelector('#place');
 const newPostPopupPicture = newPostPopup.querySelector('#picture');
 const newPostPopupSaveButton = newPostPopup.querySelector('.popup__button-save');
-const newPostPopupCloseButton = newPostPopup.querySelector('.popup__button-close');
 
-// переменные для img-zoom
-const imgZoomPopup = document.querySelector('.img-zoom');
-const imageImgZoomPopup = imgZoomPopup.querySelector('.img-zoom__img');
-const captionImgZoomPopup = imgZoomPopup.querySelector('.img-zoom__caption');
-const imgZoomPopupButtonClose = imgZoomPopup.querySelector('.popup__button-close');
+
 
 // функция закрытия ЛЮБОГО попапа
 function closePopup(popup) {
@@ -59,55 +55,7 @@ function openPopup(popup) {
   document.addEventListener('click', closeByEscapeOrClick);
 }
 
-class Card {
-  constructor(data, template) { //в конструктор передаем объект данных, где содержится имя и ссылка на картинку. и ещё передаем название шаблона
-    // поиск и копирование шаблона 
-    const _cardTemplate = document.querySelector(template).content;
-    const cardTemplateClone = _cardTemplate.cloneNode(true);
-
-    // из шаблона выбираем картинку и подпись 
-    const _cardImage = cardTemplateClone.querySelector('.element__image');
-    const _cardTitle = cardTemplateClone.querySelector('.element__title');
-
-    // выбранным картинкам и подписям присваиваем значения из полученной карточки 
-    _cardImage.src = data.link;
-    _cardImage.alt = data.name;
-    _cardTitle.textContent = data.name;
-
-    // из шаблона выбираем кнопки
-    const _cardLikeButton = cardTemplateClone.querySelector('.element__button-like');
-    const _cardTrashButton = cardTemplateClone.querySelector('.element__button-trash');
-    const _cardZoomButton = cardTemplateClone.querySelector('.element__button-zoom');
-
-    // слушатели кнопок
-    _cardLikeButton.addEventListener('click', this._toggleLike);
-    _cardTrashButton.addEventListener('click', this._deleteElement);
-    _cardZoomButton.addEventListener('click', () => {
-      this._copyToPopupZoom(data);
-      openPopup(imgZoomPopup);
-    });
-
-    return cardTemplateClone
-  }
-
-  // функция изменения состояния кнопки лайка
-  _toggleLike = function (event) {
-    event.target.classList.toggle('element__button-like_active');
-  }
-
-  // функция удаления карточки из списка карточек
-  _deleteElement = function (event) {
-    const listItem = event.target.parentElement;
-    listItem.remove();
-  }
-
-  // присваиваем нужные значения в попап картинки
-  _copyToPopupZoom(data) {
-    imageImgZoomPopup.src = data.link;
-    imageImgZoomPopup.alt = data.name;
-    captionImgZoomPopup.textContent = data.name;
-  }
-}
+export { openPopup }
 
 // функция переноса из профайла в попап
 function fillProfileInputs() {
