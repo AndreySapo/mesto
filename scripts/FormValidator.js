@@ -1,25 +1,26 @@
 class FormValidator {
   constructor(settingsObject, formElement) {
-    this.settingsObject = settingsObject;
-    this.formElement = formElement;
+    this._settingsObject = settingsObject;
+    this._formElement = formElement;
+    this._inputList = Array.from(formElement.querySelectorAll(settingsObject.inputSelector));
+    this._buttonElement = formElement.querySelector(settingsObject.buttonSelector);
   }
 
   enableValidation() {
-    this._setEventListeners(this.settingsObject, this.formElement);
+    this._setEventListeners(this._settingsObject, this._formElement);
   }
 
   _setEventListeners(settingsObject, formElement) {
-    const inputList = Array.from(formElement.querySelectorAll(settingsObject.inputSelector));
-    const buttonElement = formElement.querySelector(settingsObject.buttonSelector);
+    
 
-    inputList.forEach((inputElement) => {
+    this._inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
         this._isValid(settingsObject, formElement, inputElement);
-        this._toggleButtonState(settingsObject, inputList, buttonElement);
+        this._toggleButtonState(settingsObject, inputList, this._buttonElement);
       });
     });
 
-    this._toggleButtonState(settingsObject, inputList, buttonElement);
+    this._toggleButtonState(settingsObject, inputList, this._buttonElement);
   }
 
   _isValid(settingsObject, formElement, inputElement) {
