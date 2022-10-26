@@ -1,4 +1,4 @@
-import {openPopup} from './index.js';
+import {openPopup} from './utils.js';
 
 class Card {
   constructor(data, template) { //в конструктор передаем объект данных, где содержится имя и ссылка на картинку. и ещё передаем название шаблона
