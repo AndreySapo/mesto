@@ -1,4 +1,4 @@
-import {openPopup} from './utils.js';
+import { openPopup } from './utils.js';
 
 class Card {
   constructor(data, template) { //в конструктор передаем объект данных, где содержится имя и ссылка на картинку. и ещё передаем название шаблона
@@ -7,9 +7,9 @@ class Card {
     this.cardTemplateClone = this._cardTemplate.cloneNode(true);
 
     // переменные для img-zoom
-    this.this._imgZoomPopup = document.querySelector('.img-zoom');
-    this.this._imageImgZoomPopup = this.this._imgZoomPopup.querySelector('.img-zoom__img');
-    this.this._captionImgZoomPopup = this.this._imgZoomPopup.querySelector('.img-zoom__caption');
+    this._imgZoomPopup = document.querySelector('.img-zoom');
+    this._imageImgZoomPopup = this._imgZoomPopup.querySelector('.img-zoom__img');
+    this._captionImgZoomPopup = this._imgZoomPopup.querySelector('.img-zoom__caption');
 
     // из шаблона выбираем картинку и подпись 
     this._cardImage = this.cardTemplateClone.querySelector('.element__image');
@@ -44,7 +44,8 @@ class Card {
   // функция удаления карточки из списка карточек
   _deleteElement = function (event) {
     const listItem = event.target.parentElement;
-    listItem.remove();
+    // listItem.remove();
+    console.log(listItem)
   }
 
   // присваиваем нужные значения в попап картинки
