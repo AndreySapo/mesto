@@ -44,8 +44,8 @@ class Card {
   // функция удаления карточки из списка карточек
   _deleteElement = function (event) {
     const listItem = event.target.parentElement;
-    // listItem.remove();
-    console.log(listItem)
+    listItem.remove();
+    // console.log(listItem)
   }
 
   // присваиваем нужные значения в попап картинки
