@@ -141,11 +141,20 @@ const settings = {
   errorClass: 'popup__input-error_active'
 }
 
-// массив из всех форм на странице
-const formList = Array.from(document.forms);
+// // массив из всех форм на странице
+// const formList = Array.from(document.forms);
 
-// для каждого элемента из массива форм создаем новый объект из класса и используем его публичный метод включения валидации
-formList.forEach((formElement) => {
-  const form = new FormValidator(settings, formElement);
-  form.enableValidation();
-});
+// // для каждого элемента из массива форм создаем новый объект из класса и используем его публичный метод включения валидации
+// formList.forEach((formElement) => {
+//   const form = new FormValidator(settings, formElement);
+//   form.enableValidation();
+// });
+
+//берем форму из документа, создаем экземпляр класса для именно этой формы и включаем валидацию
+const formName = document.forms.user;
+const formNameValidity = new FormValidator(settings, formName);
+formNameValidity.enableValidation();
+
+const formNewPost = document.forms.new_post;
+const formNewPostValidity = new FormValidator(settings, formNewPost);
+formNewPostValidity.enableValidation();
