@@ -1,7 +1,7 @@
 import initialCards from "./cards.js";
 import Card from "./Card.js";
 import FormValidator from "./FormValidator.js";
-import { closePopup, openPopup} from './utils.js';
+import { closePopup, openPopup } from './utils.js';
 
 // тестовая карточка
 // Ангарск
@@ -36,6 +36,7 @@ function fillProfileInputs() {
   profilePopupJob.value = profileJob.textContent;
 }
 
+// функция сохранения из попапа в профайл
 function savePopupToProfile(event) {
   event.preventDefault();
   profileName.textContent = profilePopupName.value;
@@ -76,9 +77,7 @@ buttonsClose.forEach((button) => {
 });
 
 // по кнопке добавления поста открыть попап добавления поста
-profileAddButton.addEventListener('click', () => {
-  openPopup(newPostPopup);
-});
+profileAddButton.addEventListener('click', () => openPopup(newPostPopup));
 
 // сабмит+закрытие попапа добавления поста
 newPostPopupForm.addEventListener('submit', (event) => {
@@ -105,15 +104,6 @@ const settings = {
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__input-error_active'
 }
-
-// // массив из всех форм на странице
-// const formList = Array.from(document.forms);
-
-// // для каждого элемента из массива форм создаем новый объект из класса и используем его публичный метод включения валидации
-// formList.forEach((formElement) => {
-//   const form = new FormValidator(settings, formElement);
-//   form.enableValidation();
-// });
 
 //берем форму из документа, создаем экземпляр класса для именно этой формы и включаем валидацию
 const formName = document.forms.user;

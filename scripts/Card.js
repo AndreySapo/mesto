@@ -4,7 +4,6 @@ class Card {
   constructor(data, template) { //в конструктор передаем объект данных, где содержится имя и ссылка на картинку. и ещё передаем название шаблона
     // поиск и копирование шаблона 
     this._cardTemplate = document.querySelector(template).content;
-    // console.log(this._cardTemplate)
     this._cardTemplateClone = this._cardTemplate.cloneNode(true);
     this._element = this._cardTemplateClone.querySelector('.element');
 
@@ -29,9 +28,7 @@ class Card {
 
     // слушатели кнопок
     this._cardLikeButton.addEventListener('click', this._toggleLike);
-    this._cardTrashButton.addEventListener('click', () => {
-      this._deleteElement()
-    });
+    this._cardTrashButton.addEventListener('click', () => this._deleteElement());
     this._cardZoomButton.addEventListener('click', () => {
       this._copyToPopupZoom(data);
       openPopup(this._imgZoomPopup);
