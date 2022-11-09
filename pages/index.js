@@ -1,34 +1,30 @@
-import initialCards from "./cards.js";
-import Card from "./Card.js";
-import FormValidator from "./FormValidator.js";
-import { closePopup, openPopup } from './utils.js';
+import {
+  initialCards,
+  cardsContainer,
+  profileName,
+  profileJob,
+  profileEditButton,
+  profileAddButton,
+  profilePopup,
+  profilePopupForm,
+  profilePopupName,
+  profilePopupJob,
+  newPostPopup,
+  newPostPopupForm,
+  newPostPopupPlace,
+  newPostPopupPicture,
+  newPostPopupSaveButton,
+  validationSettings,
+  formName,
+  formNewPost
+} from '../utils/constants.js'
+import Card from "../components/Card.js";
+import FormValidator from "../components/FormValidator.js";
+import { closePopup, openPopup } from '../utils/utils.js';
 
 // тестовая карточка
 // Ангарск
-// https://bit.ly/3xqAYRg
-
-// место куда вставлять темплейт с карточками
-const cardsContainer = document.querySelector('.elements__grid');
-
-// переменные для profile
-const profile = document.querySelector('.profile');
-const profileName = profile.querySelector('.profile__name');
-const profileJob = profile.querySelector('.profile__job');
-const profileEditButton = profile.querySelector('.profile__edit-button');
-const profileAddButton = profile.querySelector('.profile__add-button');
-
-// переменные для profilePopup
-const profilePopup = document.querySelector('.profile-popup');
-const profilePopupForm = profilePopup.querySelector('.popup__form');
-const profilePopupName = profilePopup.querySelector('#name');
-const profilePopupJob = profilePopup.querySelector('#job');
-
-// переменные для new-post-popup
-const newPostPopup = document.querySelector('.new-post-popup');
-const newPostPopupForm = newPostPopup.querySelector('.popup__form');
-const newPostPopupPlace = newPostPopup.querySelector('#place');
-const newPostPopupPicture = newPostPopup.querySelector('#picture');
-const newPostPopupSaveButton = newPostPopup.querySelector('.popup__button-save');
+// https://shorturl.at/lwDTZ
 
 // функция переноса из профайла в попап
 function fillProfileInputs() {
@@ -96,20 +92,11 @@ initialCards.forEach(element => {
 
 
 // код для валидации
-// объект настроек, то, что нужно валидировать
-const settings = {
-  inputSelector: '.popup__input',
-  buttonSelector: '.popup__button-save',
-  inactiveButtonClass: 'popup__button-save_inactive',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__input-error_active'
-}
-
 //берем форму из документа, создаем экземпляр класса для именно этой формы и включаем валидацию
-const formName = document.forms.user;
-const formNameValidity = new FormValidator(settings, formName);
+
+const formNameValidity = new FormValidator(validationSettings, formName);
 formNameValidity.enableValidation();
 
-const formNewPost = document.forms.new_post;
-const formNewPostValidity = new FormValidator(settings, formNewPost);
+
+const formNewPostValidity = new FormValidator(validationSettings, formNewPost);
 formNewPostValidity.enableValidation();
