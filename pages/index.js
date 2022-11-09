@@ -21,6 +21,7 @@ import {
 import Card from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
 import { closePopup, openPopup } from '../utils/utils.js';
+import Section from '../components/Section.js';
 
 // тестовая карточка
 // Ангарск
@@ -42,10 +43,10 @@ function savePopupToProfile(event) {
 //создаем объект карточки из полученных данных
 function makeCard() {
 
-  const card = {
+  const card = [{
     name: newPostPopupPlace.value,
     link: newPostPopupPicture.value
-  }
+  }]
 
   return card
 }
@@ -78,18 +79,36 @@ profileAddButton.addEventListener('click', () => openPopup(newPostPopup));
 // сабмит+закрытие попапа добавления поста
 newPostPopupForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  cardsContainer.prepend(new Card(makeCard(), '#card-template'));
+
+  const cardAdding = new Section({
+    items: makeCard(),
+    renderer: (item) => {
+      const cardMarkup = new Card(item, '#card-template');
+      cardAdding.addItem(cardMarkup);
+    }
+  },
+  '.elements__grid'
+  );
+  cardAdding.renderItems();
+
   closePopup(newPostPopup);
   event.target.reset();
   newPostPopupSaveButton.classList.add('popup__button-save_inactive');
   newPostPopupSaveButton.setAttribute('disabled', true);
 });
 
-// создание изначальных карточек путем создания новой разметки на основе класса
-initialCards.forEach(element => {
-  cardsContainer.append(new Card(element, '#card-template'));
-});
-
+// создание изначальных карточек
+const initialCardsAdding = new Section(
+  {
+    items: initialCards,
+    renderer: (item) => {
+      const cardMarkup = new Card(item, '#card-template');
+      initialCardsAdding.addItem(cardMarkup);
+    }
+  },
+  '.elements__grid'
+);
+initialCardsAdding.renderItems();
 
 // код для валидации
 //берем форму из документа, создаем экземпляр класса для именно этой формы и включаем валидацию
