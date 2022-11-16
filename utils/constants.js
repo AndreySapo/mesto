@@ -25,28 +25,15 @@ export const initialCards = [
   }
 ];
 
-// место куда вставлять темплейт с карточками
-export const cardsContainer = document.querySelector('.elements__grid');
-
 // переменные для profile
 const profile = document.querySelector('.profile');
-export const profileName = profile.querySelector('.profile__name');
-export const profileJob = profile.querySelector('.profile__job');
 export const profileEditButton = profile.querySelector('.profile__edit-button');
 export const profileAddButton = profile.querySelector('.profile__add-button');
 
 // переменные для profilePopup
-export const profilePopup = document.querySelector('.profile-popup');
-export const profilePopupForm = profilePopup.querySelector('.popup__form');
+const profilePopup = document.querySelector('.profile-popup');
 export const profilePopupName = profilePopup.querySelector('#name');
 export const profilePopupJob = profilePopup.querySelector('#job');
-
-// переменные для new-post-popup
-export const newPostPopup = document.querySelector('.new-post-popup');
-export const newPostPopupForm = newPostPopup.querySelector('.popup__form');
-export const newPostPopupPlace = newPostPopup.querySelector('#place');
-export const newPostPopupPicture = newPostPopup.querySelector('#picture');
-export const newPostPopupSaveButton = newPostPopup.querySelector('.popup__button-save');
 
 // объект настроек, то, что нужно валидировать
 export const validationSettings = {

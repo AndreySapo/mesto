@@ -2,15 +2,18 @@ import {
   initialCards,
   profileEditButton,
   profileAddButton,
+  profilePopupName,
+  profilePopupJob,
   validationSettings,
   formName,
-  formNewPost
+  formNewPost,
 } from '../utils/constants.js'
+import Section from '../components/Section.js';
 import Card from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
-import Section from '../components/Section.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
+import UserInfo from '../components/UserInfo.js';
 // ==========================================================
 // тестовая карточка
 // Ангарск
@@ -21,11 +24,11 @@ import PopupWithImage from '../components/PopupWithImage.js';
 const initialCardsAdding = new Section({
   items: initialCards,
   renderer: (item) => {
-    const popup = new PopupWithImage('.img-zoom', item);
-    popup.setEventListeners();
     const card = new Card(item, '#card-template', () => {
-      popup.open();
+      cardPopup.open();
     });
+    const cardPopup = new PopupWithImage('.img-zoom', item);
+    cardPopup.setEventListeners();
     initialCardsAdding.addItem(card);
   }
 }, '.elements__grid');
@@ -33,16 +36,20 @@ initialCardsAdding.renderItems();
 
 // ==========================================================
 // Создание экземпляра класса попап с формой для редактирования профиля
+const userInfo = new UserInfo('.profile__name', '.profile__job');
 
-const profileEditPopup = new PopupWithForm('.profile-popup', (item) => {
-  // PopupWithForm submitCallback
+const profileEditPopup = new PopupWithForm('.profile-popup', (inputValues) => {
   event.preventDefault();
-  console.log(item);
+  userInfo.setUserInfo(inputValues);
   profileEditPopup.close();
 });
 profileEditPopup.setEventListeners();
 
-profileEditButton.addEventListener('click', () => profileEditPopup.open());
+profileEditButton.addEventListener('click', () => {
+  profilePopupName.value = userInfo.getUserInfo().name;
+  profilePopupJob.value = userInfo.getUserInfo().job;
+  profileEditPopup.open();
+});
 
 // ==========================================================
 // Создание экземпляра класса попап с формой для добавления карточки
@@ -56,11 +63,11 @@ const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
       link: inputs.picture
     }],
     renderer: (item) => {
-      const popup = new PopupWithImage('.img-zoom', item);
-      popup.setEventListeners();
       const cardMarkup = new Card(item, '#card-template', () => {
-        popup.open();
+        cardPopup.open();
       });
+      const cardPopup = new PopupWithImage('.img-zoom', item);
+      cardPopup.setEventListeners();
       card.addItem(cardMarkup);
     }
   }, '.elements__grid');
@@ -76,7 +83,6 @@ profileAddButton.addEventListener('click', () => cardAddPopup.open());
 
 const formNameValidity = new FormValidator(validationSettings, formName);
 formNameValidity.enableValidation();
-
 
 const formNewPostValidity = new FormValidator(validationSettings, formNewPost);
 formNewPostValidity.enableValidation();

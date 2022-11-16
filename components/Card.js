@@ -1,6 +1,6 @@
 
 export default class Card {
-  constructor(data, template, handleCardClick) { //в конструктор передаем объект данных, где содержится имя и ссылка на картинку. и ещё передаем название шаблона
+  constructor(data, template, handleCardClick) {
     // поиск и копирование шаблона 
     this._cardTemplate = document.querySelector(template).content;
     this._cardTemplateClone = this._cardTemplate.cloneNode(true);
