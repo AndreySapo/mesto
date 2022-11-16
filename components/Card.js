@@ -1,11 +1,12 @@
-import PopupWithImage from "./PopupWithImage.js";
 
 export default class Card {
-  constructor(data, template) { //в конструктор передаем объект данных, где содержится имя и ссылка на картинку. и ещё передаем название шаблона
+  constructor(data, template, handleCardClick) { //в конструктор передаем объект данных, где содержится имя и ссылка на картинку. и ещё передаем название шаблона
     // поиск и копирование шаблона 
     this._cardTemplate = document.querySelector(template).content;
     this._cardTemplateClone = this._cardTemplate.cloneNode(true);
     this._element = this._cardTemplateClone.querySelector('.element');
+
+    this._handleCardClick = handleCardClick;
 
     // из шаблона выбираем картинку и подпись 
     this._cardImage = this._element.querySelector('.element__image');
@@ -24,11 +25,7 @@ export default class Card {
     // слушатели кнопок
     this._cardLikeButton.addEventListener('click', this._toggleLike);
     this._cardTrashButton.addEventListener('click', () => this._element.remove());
-    this._cardZoomButton.addEventListener('click', () => {
-      const popup = new PopupWithImage('.img-zoom', data);
-      popup.setEventListeners();
-      popup.open();
-    });
+    this._cardZoomButton.addEventListener('click', this._handleCardClick);
 
     return this._element
   }
