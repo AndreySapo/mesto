@@ -1,6 +1,5 @@
 import {
   initialCards,
-  cardsContainer,
   profileName,
   profileJob,
   profileEditButton,
@@ -22,94 +21,65 @@ import Card from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
 import { closePopup, openPopup } from '../utils/utils.js';
 import Section from '../components/Section.js';
+import Popup from '../components/Popup.js';
+import PopupWithForm from '../components/PopupWithForm.js';
 
 // тестовая карточка
 // Ангарск
 // https://shorturl.at/lwDTZ
 
-// функция переноса из профайла в попап
-function fillProfileInputs() {
-  profilePopupName.value = profileName.textContent;
-  profilePopupJob.value = profileJob.textContent;
+function handleCardClick() {
+  const popup = new PopupWithImage('.img-zoom', data);
+  popup.setEventListeners();
+  popup.open();
 }
 
-// функция сохранения из попапа в профайл
-function savePopupToProfile(event) {
-  event.preventDefault();
-  profileName.textContent = profilePopupName.value;
-  profileJob.textContent = profilePopupJob.value;
-}
-
-//создаем объект карточки из полученных данных
-function makeCard() {
-
-  const card = [{
-    name: newPostPopupPlace.value,
-    link: newPostPopupPicture.value
-  }]
-
-  return card
-}
-
-// по кнопке редактирования профиля открыть попап редактирования профиля
-profileEditButton.addEventListener('click', () => {
-  openPopup(profilePopup);
-  fillProfileInputs();
-});
-
-// сабмит + закрытие попапа редактирования профиля
-profilePopupForm.addEventListener('submit', (event) => {
-  savePopupToProfile(event);
-  closePopup(profilePopup);
-});
-
-// находим все крестики проекта по универсальному селектору
-const buttonsClose = document.querySelectorAll('.popup__button-close');
-
-buttonsClose.forEach((button) => {
-  // находим 1 раз ближайший к крестику попап 
-  const popup = button.closest('.popup');
-  // устанавливаем обработчик закрытия на крестик
-  button.addEventListener('click', () => closePopup(popup));
-});
-
-// по кнопке добавления поста открыть попап добавления поста
-profileAddButton.addEventListener('click', () => openPopup(newPostPopup));
-
-// сабмит+закрытие попапа добавления поста
-newPostPopupForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-
-  const cardAdding = new Section({
-    items: makeCard(),
-    renderer: (item) => {
-      const cardMarkup = new Card(item, '#card-template');
-      cardAdding.addItem(cardMarkup);
-    }
-  },
-  '.elements__grid'
-  );
-  cardAdding.renderItems();
-
-  closePopup(newPostPopup);
-  event.target.reset();
-  newPostPopupSaveButton.classList.add('popup__button-save_inactive');
-  newPostPopupSaveButton.setAttribute('disabled', true);
-});
-
-// создание изначальных карточек
-const initialCardsAdding = new Section(
-  {
-    items: initialCards,
-    renderer: (item) => {
-      const cardMarkup = new Card(item, '#card-template');
-      initialCardsAdding.addItem(cardMarkup);
-    }
-  },
-  '.elements__grid'
-);
+//добавление изначальных карточек
+const initialCardsAdding = new Section({
+  items: initialCards,
+  renderer: (item) => {
+    const card = new Card(item, '#card-template');
+    initialCardsAdding.addItem(card);
+  }
+}, '.elements__grid');
 initialCardsAdding.renderItems();
 
+//===========================================================
+// Создание экземпляра класса попап с формой для редактирования профиля
+
+const profileEditPopup = new PopupWithForm('.profile-popup', (item) => {
+  // PopupWithForm submitCallback
+  event.preventDefault();
+  console.log(item);
+  profileEditPopup.close();
+});
+profileEditPopup.setEventListeners();
+
+profileEditButton.addEventListener('click', () => profileEditPopup.open());
+
+//===========================================================
+// Создание экземпляра класса попап с формой для добавления карточки
+
+const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
+  event.preventDefault();
+  console.log([inputs]);
+  const card = new Section({
+    items: [{
+      name: inputs.place,
+      link: inputs.picture
+    }],
+    renderer: (item) => {
+      const cardMarkup = new Card(item, '#card-template');
+      card.addItem(cardMarkup);
+    }
+  }, '.elements__grid');
+  card.renderItems();
+  cardAddPopup.close();
+});
+cardAddPopup.setEventListeners();
+
+profileAddButton.addEventListener('click', () => cardAddPopup.open());
+//===========================================================
 // код для валидации
 //берем форму из документа, создаем экземпляр класса для именно этой формы и включаем валидацию
 

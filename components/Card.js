@@ -1,16 +1,11 @@
-import { openPopup } from '../utils/utils.js';
+import PopupWithImage from "./PopupWithImage.js";
 
-class Card {
+export default class Card {
   constructor(data, template) { //в конструктор передаем объект данных, где содержится имя и ссылка на картинку. и ещё передаем название шаблона
     // поиск и копирование шаблона 
     this._cardTemplate = document.querySelector(template).content;
     this._cardTemplateClone = this._cardTemplate.cloneNode(true);
     this._element = this._cardTemplateClone.querySelector('.element');
-
-    // переменные для img-zoom
-    this._imgZoomPopup = document.querySelector('.img-zoom');
-    this._imageImgZoomPopup = this._imgZoomPopup.querySelector('.img-zoom__img');
-    this._captionImgZoomPopup = this._imgZoomPopup.querySelector('.img-zoom__caption');
 
     // из шаблона выбираем картинку и подпись 
     this._cardImage = this._element.querySelector('.element__image');
@@ -28,10 +23,11 @@ class Card {
 
     // слушатели кнопок
     this._cardLikeButton.addEventListener('click', this._toggleLike);
-    this._cardTrashButton.addEventListener('click', () => this._deleteElement());
+    this._cardTrashButton.addEventListener('click', () => this._element.remove());
     this._cardZoomButton.addEventListener('click', () => {
-      this._copyToPopupZoom(data);
-      openPopup(this._imgZoomPopup);
+      const popup = new PopupWithImage('.img-zoom', data);
+      popup.setEventListeners();
+      popup.open();
     });
 
     return this._element
@@ -41,18 +37,4 @@ class Card {
   _toggleLike = function (event) {
     event.target.classList.toggle('element__button-like_active');
   }
-
-  // функция удаления карточки из списка карточек
-  _deleteElement = function () {
-    this._element.remove();
-  }
-
-  // присваиваем нужные значения в попап картинки
-  _copyToPopupZoom(data) {
-    this._imageImgZoomPopup.src = data.link;
-    this._imageImgZoomPopup.alt = data.name;
-    this._captionImgZoomPopup.textContent = data.name;
-  }
 }
-
-export default Card;
