@@ -35,6 +35,8 @@ const profilePopup = document.querySelector('.profile-popup');
 export const profilePopupName = profilePopup.querySelector('#name');
 export const profilePopupJob = profilePopup.querySelector('#job');
 
+export const cardAddPopupButtonSave = document.querySelector('.new-post-popup').querySelector('.popup__button-save');
+
 // объект настроек, то, что нужно валидировать
 export const validationSettings = {
   inputSelector: '.popup__input',

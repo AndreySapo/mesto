@@ -24,14 +24,20 @@ export default class Card {
 
     // слушатели кнопок
     this._cardLikeButton.addEventListener('click', this._toggleLike);
-    this._cardTrashButton.addEventListener('click', () => this._element.remove());
+    this._cardTrashButton.addEventListener('click', this._remove.bind(this));
     this._cardZoomButton.addEventListener('click', this._handleCardClick);
+
+    console.log(this._element);
 
     return this._element
   }
 
+  _remove() {
+    this._element.remove();
+  }
+
   // функция изменения состояния кнопки лайка
-  _toggleLike = function (event) {
+  _toggleLike() {
     event.target.classList.toggle('element__button-like_active');
   }
 }
