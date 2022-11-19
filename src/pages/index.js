@@ -6,6 +6,7 @@ import {
   profileAddButton,
   profilePopupName,
   profilePopupJob,
+  cardAddPopupButtonSave,
   validationSettings,
   formName,
   formNewPost,
@@ -23,18 +24,18 @@ import UserInfo from '../components/UserInfo.js';
 
 // ==========================================================
 //добавление изначальных карточек
-const initialCardsAdding = new Section({
+const cardPopup = new PopupWithImage('.img-zoom');
+cardPopup.setEventListeners();
+const cardsContainer = new Section({
   items: initialCards,
   renderer: (item) => {
     const card = new Card(item, '#card-template', () => {
-      cardPopup.open();
+      cardPopup.open(item);
     });
-    const cardPopup = new PopupWithImage('.img-zoom', item);
-    cardPopup.setEventListeners();
-    initialCardsAdding.addItem(card);
+    cardsContainer.addItem(card);
   }
 }, '.elements__grid');
-initialCardsAdding.renderItems();
+cardsContainer.renderItems();
 
 // ==========================================================
 // Создание экземпляра класса попап с формой для редактирования профиля
@@ -58,23 +59,12 @@ profileEditButton.addEventListener('click', () => {
 
 const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
   event.preventDefault();
-  console.log([inputs]);
-  const card = new Section({
-    items: [{
-      name: inputs.place,
-      link: inputs.picture
-    }],
-    renderer: (item) => {
-      const cardMarkup = new Card(item, '#card-template', () => {
-        cardPopup.open();
-      });
-      const cardPopup = new PopupWithImage('.img-zoom', item);
-      cardPopup.setEventListeners();
-      card.addItem(cardMarkup);
-    }
-  }, '.elements__grid');
-  card.renderItems();
+  const item = { name: inputs.place, link: inputs.picture };
+  const newCard = new Card(item, '#card-template', () => { cardPopup.open(item) });
+  cardsContainer.addItem(newCard);
   cardAddPopup.close();
+  cardAddPopupButtonSave.classList.add('popup__button-save_inactive');
+  cardAddPopupButtonSave.setAttribute('disabled', true);
 });
 cardAddPopup.setEventListeners();
 
