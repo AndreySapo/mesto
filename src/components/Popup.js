@@ -1,24 +1,20 @@
-// Создайте класс Popup, который отвечает за открытие и закрытие попапа. Этот класс:
-// Принимает в конструктор единственный параметр — селектор попапа.
-// Содержит публичные методы open и close, которые отвечают за открытие и закрытие попапа.
-// Содержит приватный метод _handleEscClose, который содержит логику закрытия попапа клавишей Esc.
-// Содержит публичный метод setEventListeners, который добавляет слушатель клика иконке закрытия попапа. Модальное окно также закрывается при клике на затемнённую область вокруг формы.
-
 export default class Popup {
   constructor(popupSelector) {
     this._popupSelector = popupSelector;
+    this._popup = document.querySelector(this._popupSelector);
     this._buttonClose = document.querySelector(this._popupSelector).querySelector('.popup__button-close');
+    this._handleEscClose = this._handleEscClose.bind(this);
   }
 
   open() {
-    document.querySelector(this._popupSelector).classList.add('popup_opened');
+    this._popup.classList.add('popup_opened');
+    document.addEventListener('keydown', this._handleEscClose);
   }
 
   close() {
-    document.querySelector(this._popupSelector).classList.remove('popup_opened');
+    this._popup.classList.remove('popup_opened');
 
-    document.removeEventListener('click', this.close.bind(this));
-    document.removeEventListener('keydown', this._handleEscClose.bind(this));
+    document.removeEventListener('keydown', this._handleEscClose);
   }
 
   _handleEscClose() {
@@ -34,8 +30,7 @@ export default class Popup {
   }
 
   setEventListeners() {
-    document.addEventListener('click', this._handleClickClose.bind(this));
-    document.addEventListener('keydown', this._handleEscClose.bind(this));
+    this._popup.addEventListener('mousedown', this._handleClickClose.bind(this));
   }
 
 }
