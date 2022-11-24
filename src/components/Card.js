@@ -27,8 +27,6 @@ export default class Card {
     this._cardTrashButton.addEventListener('click', this._remove.bind(this));
     this._cardZoomButton.addEventListener('click', this._handleCardClick);
 
-    console.log(this._element);
-
     return this._element
   }
 
