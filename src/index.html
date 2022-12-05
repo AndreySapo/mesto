@@ -89,6 +89,22 @@
     </div>
   </div>
 
+  <div class="popup confirm-popup">
+    <div class="popup__container">
+      <form class="popup__form" name="confirm">
+
+        <h2 class="popup__header confirm-popup__header">Вы уверены?</h2>
+
+        <button type="submit" class="popup__button-save confirm-popup__button-save">
+          Да
+        </button>
+
+        <button type="button" aria-label="Кнопка закрыть" class="popup__button-close "></button>
+
+      </form>
+    </div>
+  </div>
+
   <div class="popup img-zoom">
     <figure class="img-zoom__container">
       <img class="img-zoom__img">
@@ -104,7 +120,10 @@
       </button>
       <div class="element__group">
         <h2 class="element__title"></h2>
-        <button type="button" class="element__button-like" aria-label="Кнопка лайка"></button>
+        <div class="element__like-group">
+          <button type="button" class="element__button-like" aria-label="Кнопка лайка"></button>
+          <p class="element__counter-like">0</p>
+        </div>
       </div>
       <button type="button" class="element__button-trash" aria-label="Кнопка удаления поста"></button>
     </li>

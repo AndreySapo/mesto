@@ -33,7 +33,9 @@
 @import url(../blocks/element/__group/element__group.css);
 @import url(../blocks/element/__image/element__image.css);
 @import url(../blocks/element/__title/element__title.css);
+@import url(../blocks/element/__like-group/element__like-group.css);
 @import url(../blocks/element/__button-like/element__button-like.css);
+@import url(../blocks/element/__counter-like/element__counter-like.css);
 @import url(../blocks/element/__button-like/_active/element__button-like_active.css);
 @import url(../blocks/element/__button-trash/element__button-trash.css);
 
@@ -54,6 +56,10 @@
 @import url(../blocks/popup/__button-save/popup__button-save.css);
 @import url(../blocks/popup/__button-save/_inactive/popup__button-save_inactive.css);
 @import url(../blocks/popup/__button-close/popup__button-close.css);
+
+/* Стили блока confirm-popup */
+@import url(../blocks/confirm-popup/__header/confirm-popup__header.css);
+@import url(../blocks/confirm-popup/__button-save/confirm-popup__button-save.css);
 
 /* Стили блока img-zoom*/
 @import url(../blocks/img-zoom/img-zoom.css);
