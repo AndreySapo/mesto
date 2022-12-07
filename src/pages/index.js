@@ -60,11 +60,9 @@ Promise.all(promises)
 
 
     // console.log(results[1]);
-    // initialCards.forEach( (card) => {
-    //   card.likes.forEach((user) => {
-    //     console.log(user._id === userID)
-    //   })
-    // })
+  })
+  .catch((err) => {
+    console.log(err); // выведем ошибку в консоль
   });
 
 
@@ -91,17 +89,56 @@ const cardsContainer = new Section({
   // items: initialCards,
   renderer: (item, userID) => {
 
-
-    item.likes.forEach((user) => {
-          console.log(user._id === userID)
-        })
     const card = new Card(
-      
+
       item,
       userID,
       '#card-template',
-      () => { cardPopup.open(item); }, // handleCardClick
-      (cardID) => { confirmPopup.open(cardID, card) } // handleCardDelete
+
+      // handleCardClick
+      () => { cardPopup.open(item); },
+
+      // handleCardDelete
+      (cardID) => { confirmPopup.open(cardID, card) },
+
+      // handleCardLike
+      (cardMarkup, cardData) => {
+
+        const cardDataLikes = cardData.likes;
+
+        if (!cardDataLikes.includes(userID)) {
+          cardDataLikes.push(userID);
+
+          const method = 'PUT';
+          api.toggleLike(method, cardData._id)
+            .then(result => {
+              cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
+              cardMarkup.querySelector('.element__button-like').classList.add('element__button-like_active');
+            })
+            .catch((err) => {
+              console.log(err); // выведем ошибку в консоль
+            });
+        } else {
+
+          const index = cardDataLikes.indexOf(userID);
+          if (index >= 0) {
+            cardDataLikes.splice(index, 1);
+          }
+
+          const method = 'DELETE';
+          api.toggleLike(method, cardData._id)
+            .then(result => {
+              cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
+              cardMarkup.querySelector('.element__button-like').classList.remove('element__button-like_active');
+            })
+            .catch((err) => {
+              console.log(err); // выведем ошибку в консоль
+            });
+
+        }
+
+      }
+
     );
     cardsContainer.addItem(card);
 
@@ -150,7 +187,44 @@ const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
         result.owner._id,
         '#card-template',
         () => { cardPopup.open(item) },// handleCardClick
-        (cardID) => { confirmPopup.open(cardID, newCard) } // handleCardDelete
+        (cardID) => { confirmPopup.open(cardID, newCard) }, // handleCardDelete
+        // handleCardLike
+        (cardMarkup, cardData) => {
+
+          const cardDataLikes = cardData.likes;
+
+          if (!cardDataLikes.includes(result.owner._id)) {
+            cardDataLikes.push(result.owner._id);
+
+            const method = 'PUT';
+            api.toggleLike(method, cardData._id)
+              .then(result => {
+                cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
+                cardMarkup.querySelector('.element__button-like').classList.add('element__button-like_active');
+              })
+              .catch((err) => {
+                console.log(err); // выведем ошибку в консоль
+              });
+          } else {
+
+            const index = cardDataLikes.indexOf(result.owner._id);
+            if (index >= 0) {
+              cardDataLikes.splice(index, 1);
+            }
+
+            const method = 'DELETE';
+            api.toggleLike(method, cardData._id)
+              .then(result => {
+                cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
+                cardMarkup.querySelector('.element__button-like').classList.remove('element__button-like_active');
+              })
+              .catch((err) => {
+                console.log(err); // выведем ошибку в консоль
+              });
+
+          }
+
+        }
       );
       cardsContainer.addItem(newCard);
       cardAddPopup.close();

@@ -115,4 +115,25 @@ export default class Api {
         return result
       })
   }
+
+  toggleLike(method, cardID) {
+    // Собираем новый Headers
+    const headerForToggleLike = Object.assign({}, this._headers);
+    headerForToggleLike.method = method;
+
+    return fetch(
+      this._url + `/cards/${ cardID }/likes`,
+      headerForToggleLike,
+    )
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
+      .then((result) => {
+        return result
+      })
+  }
 }
