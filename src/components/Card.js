@@ -18,6 +18,7 @@ export default class Card {
     this._cardImage.alt = data.name;
     this._cardTitle.textContent = data.name;
     this._cardLikes.textContent = data.likes.length;
+    this._cardID = data._id;
 
     
     // из шаблона выбираем кнопки
@@ -34,7 +35,7 @@ export default class Card {
 
     // слушатели кнопок
     this._cardLikeButton.addEventListener('click', this._toggleLike);
-    this._cardTrashButton.addEventListener('click', this._remove.bind(this));
+    this._cardTrashButton.addEventListener('click', () => this._handleCardDelete(this._cardID)); //this._remove.bind(this)
     this._cardZoomButton.addEventListener('click', this._handleCardClick);
 
     return this._element

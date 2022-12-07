@@ -97,9 +97,12 @@ export default class Api {
   }
 
   deleteCard(cardId) {
+    // Собираем новый Headers
+    const headerForDeleteCard = Object.assign({}, this._headers);
+    headerForDeleteCard.method = 'DELETE';
     return fetch(
-      this._url + '/cards' + cardId,
-      this._headers
+      this._url + '/cards/' + cardId,
+      headerForDeleteCard
     )
       .then(response => {
         if (response.ok) {

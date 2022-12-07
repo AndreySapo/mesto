@@ -20,6 +20,7 @@ import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api.js';
+import PopupWithConfirm from '../components/PopupWithConfirm';
 // ==========================================================
 // тестовая карточка
 // Ангарск
@@ -52,7 +53,6 @@ Promise.all(promises)
     profileName.textContent = getUserResult.name;
     profileAbout.textContent = getUserResult.about;
     const userID = results[0]._id;
-    // console.log(userID)
 
     // второй элемент - массив карточек
     const initialCards = results[1];
@@ -60,34 +60,12 @@ Promise.all(promises)
 
 
     // console.log(results[1]);
+    // initialCards.forEach( (card) => {
+    //   card.likes.forEach((user) => {
+    //     console.log(user._id === userID)
+    //   })
+    // })
   });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -95,16 +73,39 @@ Promise.all(promises)
 //добавление изначальных карточек
 const cardPopup = new PopupWithImage('.img-zoom');
 cardPopup.setEventListeners();
+
+const confirmPopup = new PopupWithConfirm('.confirm-popup', (cardID, card) => {
+  event.preventDefault();
+  api.deleteCard(cardID)
+    .then(() => {
+      confirmPopup.close();
+      card.remove();
+    })
+    .catch((err) => {
+      console.log(err); // выведем ошибку в консоль
+    });
+});
+confirmPopup.setEventListeners();
+
 const cardsContainer = new Section({
   // items: initialCards,
   renderer: (item, userID) => {
+
+
+    item.likes.forEach((user) => {
+          console.log(user._id === userID)
+        })
     const card = new Card(
-      item,
-      userID, '#card-template',
-      () => { cardPopup.open(item); },
       
+      item,
+      userID,
+      '#card-template',
+      () => { cardPopup.open(item); }, // handleCardClick
+      (cardID) => { confirmPopup.open(cardID, card) } // handleCardDelete
     );
     cardsContainer.addItem(card);
+
+
   }
 }, '.elements__grid');
 
@@ -120,10 +121,12 @@ const profileEditPopup = new PopupWithForm('.profile-popup', (inputValues) => {
     about: inputValues.job
   })
     .then((result) => {
-      console.log(result);
       profileName.textContent = result.name;
       profileAbout.textContent = result.about;
     })
+    .catch((err) => {
+      console.log(err); // выведем ошибку в консоль
+    });
   profileEditPopup.close();
 });
 profileEditPopup.setEventListeners();
@@ -146,13 +149,16 @@ const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
       const newCard = new Card(item,
         result.owner._id,
         '#card-template',
-        () => { cardPopup.open(item) },
-        
+        () => { cardPopup.open(item) },// handleCardClick
+        (cardID) => { confirmPopup.open(cardID, newCard) } // handleCardDelete
       );
       cardsContainer.addItem(newCard);
       cardAddPopup.close();
       cardAddPopupButtonSave.classList.add('popup__button-save_inactive');
       cardAddPopupButtonSave.setAttribute('disabled', true);
+    })
+    .catch((err) => {
+      console.log(err); // выведем ошибку в консоль
     });
 });
 cardAddPopup.setEventListeners();
