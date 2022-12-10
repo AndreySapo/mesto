@@ -233,7 +233,7 @@ const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
 
         }
       );
-      cardsContainer.addItem(newCard);
+      cardsContainer.addNewCard(newCard);
       cardAddPopup.close();
       cardAddPopupButtonSave.classList.add('popup__button-save_inactive');
       cardAddPopupButtonSave.setAttribute('disabled', true);

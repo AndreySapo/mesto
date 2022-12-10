@@ -7,6 +7,10 @@ export default class Section {
   }
 
   addItem(item) {//принимает DOM-элемент и добавляет его в контейнер.
+    this._container.append(item);
+  }
+
+  addNewCard(item) {
     this._container.prepend(item);
   }
 
