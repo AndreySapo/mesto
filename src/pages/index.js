@@ -1,7 +1,6 @@
 import './index.css';
 
 import {
-  // initialCards,
   profileName,
   profileAbout,
   profileEditButton,
@@ -12,6 +11,11 @@ import {
   validationSettings,
   formName,
   formNewPost,
+  avatarEditButton,
+  formAvatar,
+  profileAvatar,
+  avatarEditPopupButtonSave,
+  profilePopupButtonSave
 } from '../utils/constants.js'
 import Section from '../components/Section.js';
 import Card from "../components/Card.js";
@@ -52,6 +56,7 @@ Promise.all(promises)
     const getUserResult = results[0];
     profileName.textContent = getUserResult.name;
     profileAbout.textContent = getUserResult.about;
+    profileAvatar.src = getUserResult.avatar;
     const userID = results[0]._id;
 
     // второй элемент - массив карточек
@@ -165,6 +170,8 @@ const profileEditPopup = new PopupWithForm('.profile-popup', (inputValues) => {
       console.log(err); // выведем ошибку в консоль
     });
   profileEditPopup.close();
+  profilePopupButtonSave.classList.add('popup__button-save_inactive');
+  profilePopupButtonSave.setAttribute('disabled', true);
 });
 profileEditPopup.setEventListeners();
 
@@ -239,6 +246,26 @@ cardAddPopup.setEventListeners();
 
 profileAddButton.addEventListener('click', () => cardAddPopup.open());
 // ==========================================================
+// avatar-edit-popup
+const avatarEditPopup = new PopupWithForm('.avatar-edit-popup', (input) => {
+  event.preventDefault();
+  console.log(input);
+  api.setAvatar(input)
+    .then((result) => {
+      console.log(result);
+      profileAvatar.src = result.avatar;
+      avatarEditPopupButtonSave.classList.add('popup__button-save_inactive');
+      avatarEditPopupButtonSave.setAttribute('disabled', true);
+      avatarEditPopup.close();
+    })
+}
+)
+avatarEditPopup.setEventListeners();
+
+avatarEditButton.addEventListener('click', () => avatarEditPopup.open());
+
+
+// ==========================================================
 // код для валидации
 //берем форму из документа, создаем экземпляр класса для именно этой формы и включаем валидацию
 
@@ -247,3 +274,6 @@ formNameValidity.enableValidation();
 
 const formNewPostValidity = new FormValidator(validationSettings, formNewPost);
 formNewPostValidity.enableValidation();
+
+const formEditAvatarValidity = new FormValidator(validationSettings, formAvatar);
+formEditAvatarValidity.enableValidation();

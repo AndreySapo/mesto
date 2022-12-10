@@ -136,4 +136,30 @@ export default class Api {
         return result
       })
   }
+
+  setAvatar(input) {
+    const headerForSetAvatar = Object.assign({}, this._headers);
+    headerForSetAvatar.headers[`Content-Type`] = 'application/json';
+    headerForSetAvatar.method = 'PATCH';
+    headerForSetAvatar.body = JSON.stringify(
+      {
+        avatar: input.avatar
+      }
+    )
+
+    return fetch(
+      this._url + '/users/me/avatar',
+      headerForSetAvatar
+    )
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
+      .then((result) => {
+        return result
+      })
+  }
 }
