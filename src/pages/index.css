@@ -16,15 +16,14 @@
 @import url(../blocks/profile/profile.css);
 @import url(../blocks/profile/__main-container/profile__main-container.css);
 @import url(../blocks/profile/__avatar/profile__avatar.css);
-
+@import url(../blocks/profile/__avatar-img/profile__avatar-img.css);
+@import url(../blocks/profile/__avatar-edit-button/profile__avatar-edit-button.css);
 @import url(../blocks/profile/__info/profile__info.css);
 @import url(../blocks/profile/__final-container/profile__final-container.css);
 @import url(../blocks/profile/__name/profile__name.css);
 @import url(../blocks/profile/__edit-button/profile__edit-button.css);
 @import url(../blocks/profile/__job/profile__job.css);
 @import url(../blocks/profile/__add-button/profile__add-button.css);
-
-
 
 /* Стили блока elements и element */
 @import url(../blocks/elements/elements.css);
@@ -71,34 +70,3 @@
 @import url(../blocks/img-zoom/__button-close/img-zoom__button-close.css);
 
 
-
-.profile__avatar-img {
-  margin: 0;
-  padding: 0;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-}
-
-.profile__avatar-edit-button {
-  background-color: rgba(0, 0, 0, 0);
-  background-size: auto;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin: 0;
-  padding: 0;
-  width: 120px;
-  height: 120px;
-  border: none;
-  border-radius: 50%;
-  position: absolute;
-  left: 0;
-  cursor: pointer;
-  transition: background .1s linear;
-}
-
-.profile__avatar-edit-button:hover {
-  background-image: url(../images/pencil.svg);
-  background-color: rgba(0, 0, 0, .8);
-}

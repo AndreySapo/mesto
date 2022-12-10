@@ -29,4 +29,16 @@ export default class PopupWithConfirm extends Popup {
     // сбрасываем форму и удаляем дополнительный слушатель
     this._popup.removeEventListener('submit', this._submitCallbackHandler.bind(this) );
   }
+
+  remove(){
+    this._cardMarkup.remove();
+  }
+
+  renderLoading(isLoading){
+    if (isLoading) {
+      this._buttonSave.textContent = 'Сохраняем...';
+    } else {
+      this._buttonSave.textContent = 'Да';
+    }
+  }
 }

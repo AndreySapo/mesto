@@ -2,7 +2,9 @@ export default class Popup {
   constructor(popupSelector) {
     this._popupSelector = popupSelector;
     this._popup = document.querySelector(this._popupSelector);
-    this._buttonClose = document.querySelector(this._popupSelector).querySelector('.popup__button-close');
+    this._buttonSave = this._popup.querySelector('.popup__button-save');
+    this._buttonSaveLoading = this._popup.querySelector('.popup__button-save_loading');
+    this._buttonClose = this._popup.querySelector('.popup__button-close');
     this._handleEscClose = this._handleEscClose.bind(this);
   }
 
@@ -33,4 +35,11 @@ export default class Popup {
     this._popup.addEventListener('mousedown', this._handleClickClose.bind(this));
   }
 
+  renderLoading(isLoading) {
+    if (isLoading) {
+      this._buttonSave.textContent = 'Сохраняем...';
+    } else {
+      this._buttonSave.textContent = 'Сохранить';
+    }
+  }
 }

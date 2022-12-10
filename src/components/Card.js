@@ -50,13 +50,4 @@ export default class Card {
 
     return this._element
   }
-
-  _remove() {
-    this._element.remove();
-  }
-
-  // функция изменения состояния кнопки лайка
-  _toggleLike() {
-    event.target.classList.toggle('element__button-like_active');
-  }
 }

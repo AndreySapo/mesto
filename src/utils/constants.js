@@ -11,7 +11,7 @@ export const profileAvatar = profile.querySelector('.profile__avatar-img');
 const profilePopup = document.querySelector('.profile-popup');
 export const profilePopupName = profilePopup.querySelector('#name');
 export const profilePopupJob = profilePopup.querySelector('#job');
-export const profilePopupButtonSave = profilePopup.querySelector('.popup__button-close');
+export const profilePopupButtonSave = profilePopup.querySelector('.popup__button-save');
 
 // переменные для avatarEditPopup
 export const avatarEditPopup = document.querySelector('.avatar-edit-popup');

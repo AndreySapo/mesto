@@ -39,7 +39,7 @@ const apiSettings = {
   token: '05145e33-315e-4591-bbb6-f1880e215d8f'
 }
 
-// создаем экземпляр
+// создаем экземпляр обращения к API
 const api = new Api(apiSettings);
 
 // создаем переменные для промисов
@@ -62,58 +62,35 @@ Promise.all(promises)
     // второй элемент - массив карточек
     const initialCards = results[1];
     cardsContainer.renderItems(initialCards, userID);
-
-
-    // console.log(results[1]);
   })
   .catch((err) => {
     console.log(err); // выведем ошибку в консоль
   });
 
-
-
 // ==========================================================
-//добавление изначальных карточек
+// добавление изначальных карточек
+
+// создаем экземпляр класса попап для клика по карточке
 const cardPopup = new PopupWithImage('.img-zoom');
 cardPopup.setEventListeners();
 
-const confirmPopup = new PopupWithConfirm('.confirm-popup', (cardID, card) => {
-  event.preventDefault();
-  api.deleteCard(cardID)
-    .then(() => {
-      confirmPopup.close();
-      card.remove();
-    })
-    .catch((err) => {
-      console.log(err); // выведем ошибку в консоль
-    });
-});
-confirmPopup.setEventListeners();
-
+// создаем экземпляр секции с карточкамии
 const cardsContainer = new Section({
-  // items: initialCards,
   renderer: (item, userID) => {
-
     const card = new Card(
-
       item,
       userID,
       '#card-template',
-
       // handleCardClick
       () => { cardPopup.open(item); },
-
       // handleCardDelete
       (cardID) => { confirmPopup.open(cardID, card) },
-
       // handleCardLike
       (cardMarkup, cardData) => {
-
         const cardDataLikes = cardData.likes;
-
+        // если среди лайкнувших юзеров нет меня - тогда поставить лайк
         if (!cardDataLikes.includes(userID)) {
           cardDataLikes.push(userID);
-
           const method = 'PUT';
           api.toggleLike(method, cardData._id)
             .then(result => {
@@ -123,8 +100,7 @@ const cardsContainer = new Section({
             .catch((err) => {
               console.log(err); // выведем ошибку в консоль
             });
-        } else {
-
+        } else { // иначе если среди лайкнувших юзеров есть я - тогда удалить меня из лайкнувших юзеров и снять лайк
           const index = cardDataLikes.indexOf(userID);
           if (index >= 0) {
             cardDataLikes.splice(index, 1);
@@ -139,15 +115,9 @@ const cardsContainer = new Section({
             .catch((err) => {
               console.log(err); // выведем ошибку в консоль
             });
-
         }
-
-      }
-
-    );
+      });
     cardsContainer.addItem(card);
-
-
   }
 }, '.elements__grid');
 
@@ -156,8 +126,10 @@ const cardsContainer = new Section({
 // Создание экземпляра класса попап с формой для редактирования профиля
 const userInfo = new UserInfo('.profile__name', '.profile__job');
 
+// попап редактирования профиля
 const profileEditPopup = new PopupWithForm('.profile-popup', (inputValues) => {
   event.preventDefault();
+  profileEditPopup.renderLoading(true);
   api.setUserName({
     name: inputValues.name,
     about: inputValues.job
@@ -168,7 +140,8 @@ const profileEditPopup = new PopupWithForm('.profile-popup', (inputValues) => {
     })
     .catch((err) => {
       console.log(err); // выведем ошибку в консоль
-    });
+    })
+    .finally(profileEditPopup.renderLoading(false));
   profileEditPopup.close();
   profilePopupButtonSave.classList.add('popup__button-save_inactive');
   profilePopupButtonSave.setAttribute('disabled', true);
@@ -182,27 +155,41 @@ profileEditButton.addEventListener('click', () => {
 });
 
 // ==========================================================
-// Создание экземпляра класса попап с формой для добавления карточки
+// создаем экземпляр класса для удаления карточки
+const confirmPopup = new PopupWithConfirm('.confirm-popup', (cardID, card) => {
+  event.preventDefault();
+  confirmPopup.renderLoading(true);
+  api.deleteCard(cardID)
+    .then(() => {
+      confirmPopup.close();
+      card.remove();
+    })
+    .catch((err) => {
+      console.log(err); // выведем ошибку в консоль
+    })
+    .finally(confirmPopup.renderLoading(false));
+});
+confirmPopup.setEventListeners();
 
+// Создание экземпляра класса попап с формой для добавления карточки
 const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
   event.preventDefault();
+  cardAddPopup.renderLoading(true);
   api.addNewCard({ name: inputs.place, link: inputs.picture })
     .then(result => {
-      // console.log(result);
-      const item = result;
-      const newCard = new Card(item,
+      const newCard = new Card(result,
         result.owner._id,
         '#card-template',
-        () => { cardPopup.open(item) },// handleCardClick
-        (cardID) => { confirmPopup.open(cardID, newCard) }, // handleCardDelete
+        // handleCardClick
+        () => { cardPopup.open(result) },
+        // handleCardDelete
+        (cardID) => { confirmPopup.open(cardID, newCard) }, 
         // handleCardLike
+        // функция аналогична как и для начальных карточек, только получаем юзера из ответа API
         (cardMarkup, cardData) => {
-
           const cardDataLikes = cardData.likes;
-
           if (!cardDataLikes.includes(result.owner._id)) {
             cardDataLikes.push(result.owner._id);
-
             const method = 'PUT';
             api.toggleLike(method, cardData._id)
               .then(result => {
@@ -228,9 +215,7 @@ const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
               .catch((err) => {
                 console.log(err); // выведем ошибку в консоль
               });
-
           }
-
         }
       );
       cardsContainer.addNewCard(newCard);
@@ -240,26 +225,30 @@ const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
     })
     .catch((err) => {
       console.log(err); // выведем ошибку в консоль
-    });
+    })
+    .finally(cardAddPopup.renderLoading(false));
 });
 cardAddPopup.setEventListeners();
 
 profileAddButton.addEventListener('click', () => cardAddPopup.open());
+
 // ==========================================================
-// avatar-edit-popup
+// попап редактирования аватарки
 const avatarEditPopup = new PopupWithForm('.avatar-edit-popup', (input) => {
   event.preventDefault();
-  console.log(input);
+  avatarEditPopup.renderLoading(true)
   api.setAvatar(input)
     .then((result) => {
-      console.log(result);
       profileAvatar.src = result.avatar;
       avatarEditPopupButtonSave.classList.add('popup__button-save_inactive');
       avatarEditPopupButtonSave.setAttribute('disabled', true);
       avatarEditPopup.close();
     })
-}
-)
+    .catch((err) => {
+      console.log(err); // выведем ошибку в консоль
+    })
+    .finally(avatarEditPopup.renderLoading(false));
+});
 avatarEditPopup.setEventListeners();
 
 avatarEditButton.addEventListener('click', () => avatarEditPopup.open());
@@ -267,7 +256,7 @@ avatarEditButton.addEventListener('click', () => avatarEditPopup.open());
 
 // ==========================================================
 // код для валидации
-//берем форму из документа, создаем экземпляр класса для именно этой формы и включаем валидацию
+// берем форму из документа, создаем экземпляр класса для именно этой формы и включаем валидацию
 
 const formNameValidity = new FormValidator(validationSettings, formName);
 formNameValidity.enableValidation();
