@@ -13,7 +13,9 @@
 }
 
 .popup__input-error_active:last-of-type {
-  top: 197px;
+  top: 0;
+  position: relative;
+  margin-top: 5px;
 }
 
 @media screen and (max-width: 767px) {
