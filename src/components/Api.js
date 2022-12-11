@@ -8,33 +8,27 @@ export default class Api {
     }
   }
 
+  _getResponseData(response) {
+    if (!response.ok) {
+      return Promise.reject(`Ошибка: ${response.status}`);
+    }
+    return response.json()
+  }
+
   // Получаем юзера
   getUser() {
     return fetch(this._url + '/users/me', this._headers)
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
-      .then((result) => {
-        return result
-      })
+          return this._getResponseData(response)
+      }
+      )
   }
 
   // Получаем начальные карточки
   getInitialCards() {
     return fetch(this._url + '/cards', this._headers)
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
-      .then((result) => {
-        return result
+        return this._getResponseData(response);
       })
   }
 
@@ -56,14 +50,7 @@ export default class Api {
       headerForSetUserName
     )
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
-      .then((result) => {
-        return result
+        return this._getResponseData(response);
       })
   }
 
@@ -85,14 +72,7 @@ export default class Api {
       headerForAddNewCard
     )
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
-      .then((result) => {
-        return result
+        return this._getResponseData(response)
       })
   }
 
@@ -105,14 +85,7 @@ export default class Api {
       headerForDeleteCard
     )
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
-      .then((result) => {
-        return result
+        return this._getResponseData(response);
       })
   }
 
@@ -152,14 +125,7 @@ export default class Api {
       headerForSetAvatar
     )
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
-      .then((result) => {
-        return result
+        return this._getResponseData(response);
       })
   }
 }

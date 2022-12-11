@@ -30,7 +30,7 @@ export default class Card {
     this._cardZoomButton = this._element.querySelector('.element__button-zoom');
 
     // если айди владельца карточки совпадает с моим айди - включаем мусорку
-    if (data.owner._id == userID) {
+    if (data.owner._id === userID) {
       this._cardTrashButton.removeAttribute('disabled', true);
       this._cardTrashButton.style.visibility = 'visible';
     }
@@ -45,9 +45,18 @@ export default class Card {
 
     // слушатели кнопок
     this._cardLikeButton.addEventListener('click', () => this._handleCardLike(this._element, data));
-    this._cardTrashButton.addEventListener('click', () => this._handleCardDelete(this._cardID)); //this._remove.bind(this)
+    this._cardTrashButton.addEventListener('click', () => this._handleCardDelete(this._cardID));
     this._cardZoomButton.addEventListener('click', this._handleCardClick);
 
     return this._element
+  }
+
+  setLike(length, isActive){
+    this._cardLikes.textContent = length;
+    if (isActive) {
+      this._cardLikeButton.classList.add('element__button-like_active');
+    } else {
+      this._cardLikeButton.classList.remove('element__button-like_active');      
+    }
   }
 }

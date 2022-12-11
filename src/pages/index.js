@@ -1,8 +1,6 @@
 import './index.css';
 
 import {
-  profileName,
-  profileAbout,
   profileEditButton,
   profileAddButton,
   profilePopupName,
@@ -31,6 +29,9 @@ import PopupWithConfirm from '../components/PopupWithConfirm';
 // https://shorturl.at/lwDTZ
 
 // ==========================================================
+// Создание экземпляра класса попап с формой для редактирования профиля
+const userInfo = new UserInfo('.profile__name', '.profile__job', '.profile__avatar-img');
+
 // Работа с API
 // задаем настройки для запросов
 const apiSettings = {
@@ -54,9 +55,8 @@ Promise.all(promises)
   .then((results) => {
     // первый элемент - объект с именем
     const getUserResult = results[0];
-    profileName.textContent = getUserResult.name;
-    profileAbout.textContent = getUserResult.about;
-    profileAvatar.src = getUserResult.avatar;
+    userInfo.setUserInfo(getUserResult);
+    userInfo.setUserAvatar(getUserResult);
     const userID = results[0]._id;
 
     // второй элемент - массив карточек
@@ -90,6 +90,8 @@ const cardsContainer = new Section({
         const cardDataLikes = cardData.likes;
         // если среди лайкнувших юзеров нет меня - тогда поставить лайк
         if (!cardDataLikes.includes(userID)) {
+          //  Добавление/удаление id пользователя в данный массив не имеет никакого эффекта, так как далее переменная cardDataLikes нигде более не используется.
+          // Следует удалить данную строку и строки 104-107
           cardDataLikes.push(userID);
           const method = 'PUT';
           api.toggleLike(method, cardData._id)
@@ -123,8 +125,6 @@ const cardsContainer = new Section({
 
 
 // ==========================================================
-// Создание экземпляра класса попап с формой для редактирования профиля
-const userInfo = new UserInfo('.profile__name', '.profile__job');
 
 // попап редактирования профиля
 const profileEditPopup = new PopupWithForm('.profile-popup', (inputValues) => {
@@ -135,14 +135,13 @@ const profileEditPopup = new PopupWithForm('.profile-popup', (inputValues) => {
     about: inputValues.job
   })
     .then((result) => {
-      profileName.textContent = result.name;
-      profileAbout.textContent = result.about;
+      userInfo.setUserInfo(result);
+      profileEditPopup.close();
     })
     .catch((err) => {
       console.log(err); // выведем ошибку в консоль
     })
-    .finally(profileEditPopup.renderLoading(false));
-  profileEditPopup.close();
+    .finally(() => profileEditPopup.renderLoading(false));
   profilePopupButtonSave.classList.add('popup__button-save_inactive');
   profilePopupButtonSave.setAttribute('disabled', true);
 });
@@ -167,7 +166,7 @@ const confirmPopup = new PopupWithConfirm('.confirm-popup', (cardID, card) => {
     .catch((err) => {
       console.log(err); // выведем ошибку в консоль
     })
-    .finally(confirmPopup.renderLoading(false));
+    .finally(() => confirmPopup.renderLoading(false));
 });
 confirmPopup.setEventListeners();
 
@@ -177,13 +176,14 @@ const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
   cardAddPopup.renderLoading(true);
   api.addNewCard({ name: inputs.place, link: inputs.picture })
     .then(result => {
+      // Чтобы не дублировать код (строки 80-120), создание карточки следует вынести в отдельную функцию
       const newCard = new Card(result,
         result.owner._id,
         '#card-template',
         // handleCardClick
         () => { cardPopup.open(result) },
         // handleCardDelete
-        (cardID) => { confirmPopup.open(cardID, newCard) }, 
+        (cardID) => { confirmPopup.open(cardID, newCard) },
         // handleCardLike
         // функция аналогична как и для начальных карточек, только получаем юзера из ответа API
         (cardMarkup, cardData) => {
@@ -226,7 +226,7 @@ const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
     .catch((err) => {
       console.log(err); // выведем ошибку в консоль
     })
-    .finally(cardAddPopup.renderLoading(false));
+    .finally(() => cardAddPopup.renderLoading(false));
 });
 cardAddPopup.setEventListeners();
 
@@ -239,6 +239,9 @@ const avatarEditPopup = new PopupWithForm('.avatar-edit-popup', (input) => {
   avatarEditPopup.renderLoading(true)
   api.setAvatar(input)
     .then((result) => {
+      // DOM установку информации о пользователе следует осуществлять с помощью отдельных методов класса UserInfo:
+      // setUserInfo
+      // setUserAvavatar
       profileAvatar.src = result.avatar;
       avatarEditPopupButtonSave.classList.add('popup__button-save_inactive');
       avatarEditPopupButtonSave.setAttribute('disabled', true);
@@ -247,7 +250,7 @@ const avatarEditPopup = new PopupWithForm('.avatar-edit-popup', (input) => {
     .catch((err) => {
       console.log(err); // выведем ошибку в консоль
     })
-    .finally(avatarEditPopup.renderLoading(false));
+    .finally(() => avatarEditPopup.renderLoading(false));
 });
 avatarEditPopup.setEventListeners();
 
