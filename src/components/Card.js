@@ -1,5 +1,5 @@
 export default class Card {
-  constructor(data, userID, template, handleCardClick, handleCardDelete, handleCardLike) {
+  constructor({data, userID, template, handleCardClick, handleCardDelete, handleCardLike}) {
     // поиск и копирование шаблона 
     this._cardTemplate = document.querySelector(template).content;
     this._cardTemplateClone = this._cardTemplate.cloneNode(true);
@@ -35,28 +35,38 @@ export default class Card {
       this._cardTrashButton.style.visibility = 'visible';
     }
 
+    this.likeState = false;
+
     // лайки - это массив. для каждого элемента массива лайков (т.е. объекта юзера) делаем проверку
     // если айди лайкнувшего человека = мой айди, тогда элементу кнопки лайка добавляем состояние активной кнопки
     data.likes.forEach((user) => {
       if (user._id === userID) {
         this._cardLikeButton.classList.add('element__button-like_active');
+        this.likeState = true;
       }
     })
 
     // слушатели кнопок
-    this._cardLikeButton.addEventListener('click', () => this._handleCardLike(this._element, data));
+    this._cardLikeButton.addEventListener('click', () => this._handleCardLike(this));
     this._cardTrashButton.addEventListener('click', () => this._handleCardDelete(this._cardID));
     this._cardZoomButton.addEventListener('click', this._handleCardClick);
 
     return this._element
   }
 
-  setLike(length, isActive){
-    this._cardLikes.textContent = length;
-    if (isActive) {
-      this._cardLikeButton.classList.add('element__button-like_active');
-    } else {
-      this._cardLikeButton.classList.remove('element__button-like_active');      
-    }
+  addLike(length){
+    this._cardLikeButton.classList.add('element__button-like_active')
+    this._cardLikes.textContent = length
+    this.likeState = true
+  }
+
+  removeLike(length){
+    this._cardLikeButton.classList.remove('element__button-like_active')
+    this._cardLikes.textContent = length
+    this.likeState = false
+  }
+
+  deleteCard(){
+    this._element.remove();
   }
 }

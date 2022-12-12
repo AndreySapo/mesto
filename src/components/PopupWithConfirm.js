@@ -8,16 +8,8 @@ export default class PopupWithConfirm extends Popup {
     this._form = this._popup.querySelector('.popup__form');
   }
 
-  open(cardID, cardMarkup) {
-    super.open();
-    // Попап подтверждения должен уметь работать для подтверждения любых действий, а не только для подтверждения удаления карточки, то есть его логика должна быть абстрактна.
-    // Для этого следует заменить все вхождения слова card на более абстрактное, например, item
-    this._cardID = cardID;
-    this._cardMarkup = cardMarkup;
-  }
-
   _submitCallbackHandler() {
-    this._submitCallback(this._cardID, this._cardMarkup);
+    this._submitCallback();
   }
 
   setEventListeners() {

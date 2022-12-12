@@ -29,6 +29,39 @@ import PopupWithConfirm from '../components/PopupWithConfirm';
 // https://shorturl.at/lwDTZ
 
 // ==========================================================
+
+function generateCard(cardData, userID) {
+  return {
+    data: cardData,
+    userID: userID,
+    template: '#card-template',
+    handleCardClick: () => { cardPopup.open(cardData); },
+    handleCardDelete: () => {
+      confirmPopup.open()
+    },
+    handleCardLike: (thisCard) => {
+      if (thisCard.likeState) {
+        api
+          .dislike(cardData._id)
+          .then(result => {
+            thisCard.removeLike(result.likes.length)
+          });
+      } else {
+        console.log('клик по НЕ лайкнутой карточке')
+        api
+          .like(cardData._id)
+          .then(result => {
+            thisCard.addLike(result.likes.length)
+          });
+      }
+    }
+  }
+}
+
+function deleteCard() {
+  
+}
+
 // Создание экземпляра класса попап с формой для редактирования профиля
 const userInfo = new UserInfo('.profile__name', '.profile__job', '.profile__avatar-img');
 
@@ -77,48 +110,7 @@ cardPopup.setEventListeners();
 // создаем экземпляр секции с карточкамии
 const cardsContainer = new Section({
   renderer: (item, userID) => {
-    const card = new Card(
-      item,
-      userID,
-      '#card-template',
-      // handleCardClick
-      () => { cardPopup.open(item); },
-      // handleCardDelete
-      (cardID) => { confirmPopup.open(cardID, card) },
-      // handleCardLike
-      (cardMarkup, cardData) => {
-        const cardDataLikes = cardData.likes;
-        // если среди лайкнувших юзеров нет меня - тогда поставить лайк
-        if (!cardDataLikes.includes(userID)) {
-          //  Добавление/удаление id пользователя в данный массив не имеет никакого эффекта, так как далее переменная cardDataLikes нигде более не используется.
-          // Следует удалить данную строку и строки 104-107
-          cardDataLikes.push(userID);
-          const method = 'PUT';
-          api.toggleLike(method, cardData._id)
-            .then(result => {
-              cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
-              cardMarkup.querySelector('.element__button-like').classList.add('element__button-like_active');
-            })
-            .catch((err) => {
-              console.log(err); // выведем ошибку в консоль
-            });
-        } else { // иначе если среди лайкнувших юзеров есть я - тогда удалить меня из лайкнувших юзеров и снять лайк
-          const index = cardDataLikes.indexOf(userID);
-          if (index >= 0) {
-            cardDataLikes.splice(index, 1);
-          }
-
-          const method = 'DELETE';
-          api.toggleLike(method, cardData._id)
-            .then(result => {
-              cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
-              cardMarkup.querySelector('.element__button-like').classList.remove('element__button-like_active');
-            })
-            .catch((err) => {
-              console.log(err); // выведем ошибку в консоль
-            });
-        }
-      });
+    const card = new Card(generateCard(item, userID));
     cardsContainer.addItem(card);
   }
 }, '.elements__grid');
@@ -155,19 +147,7 @@ profileEditButton.addEventListener('click', () => {
 
 // ==========================================================
 // создаем экземпляр класса для удаления карточки
-const confirmPopup = new PopupWithConfirm('.confirm-popup', (cardID, card) => {
-  event.preventDefault();
-  confirmPopup.renderLoading(true);
-  api.deleteCard(cardID)
-    .then(() => {
-      confirmPopup.close();
-      card.remove();
-    })
-    .catch((err) => {
-      console.log(err); // выведем ошибку в консоль
-    })
-    .finally(() => confirmPopup.renderLoading(false));
-});
+const confirmPopup = new PopupWithConfirm('.confirm-popup', deleteCard());
 confirmPopup.setEventListeners();
 
 // Создание экземпляра класса попап с формой для добавления карточки
@@ -177,47 +157,7 @@ const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
   api.addNewCard({ name: inputs.place, link: inputs.picture })
     .then(result => {
       // Чтобы не дублировать код (строки 80-120), создание карточки следует вынести в отдельную функцию
-      const newCard = new Card(result,
-        result.owner._id,
-        '#card-template',
-        // handleCardClick
-        () => { cardPopup.open(result) },
-        // handleCardDelete
-        (cardID) => { confirmPopup.open(cardID, newCard) },
-        // handleCardLike
-        // функция аналогична как и для начальных карточек, только получаем юзера из ответа API
-        (cardMarkup, cardData) => {
-          const cardDataLikes = cardData.likes;
-          if (!cardDataLikes.includes(result.owner._id)) {
-            cardDataLikes.push(result.owner._id);
-            const method = 'PUT';
-            api.toggleLike(method, cardData._id)
-              .then(result => {
-                cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
-                cardMarkup.querySelector('.element__button-like').classList.add('element__button-like_active');
-              })
-              .catch((err) => {
-                console.log(err); // выведем ошибку в консоль
-              });
-          } else {
-
-            const index = cardDataLikes.indexOf(result.owner._id);
-            if (index >= 0) {
-              cardDataLikes.splice(index, 1);
-            }
-
-            const method = 'DELETE';
-            api.toggleLike(method, cardData._id)
-              .then(result => {
-                cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
-                cardMarkup.querySelector('.element__button-like').classList.remove('element__button-like_active');
-              })
-              .catch((err) => {
-                console.log(err); // выведем ошибку в консоль
-              });
-          }
-        }
-      );
+      const newCard = new Card(generateCard(result, result.owner._id));
       cardsContainer.addNewCard(newCard);
       cardAddPopup.close();
       cardAddPopupButtonSave.classList.add('popup__button-save_inactive');

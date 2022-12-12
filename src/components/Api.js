@@ -89,10 +89,10 @@ export default class Api {
       })
   }
 
-  toggleLike(method, cardID) {
+  like(cardID) {
     // Собираем новый Headers
     const headerForToggleLike = Object.assign({}, this._headers);
-    headerForToggleLike.method = method;
+    headerForToggleLike.method = 'PUT';
 
     return fetch(
       this._url + `/cards/${ cardID }/likes`,
@@ -109,6 +109,29 @@ export default class Api {
         return result
       })
   }
+
+  dislike(cardID) {
+    // Собираем новый Headers
+    const headerForToggleLike = Object.assign({}, this._headers);
+    headerForToggleLike.method = 'DELETE';
+
+    return fetch(
+      this._url + `/cards/${ cardID }/likes`,
+      headerForToggleLike,
+    )
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
+      .then((result) => {
+        return result
+      })
+  }
+
+
 
   setAvatar(input) {
     const headerForSetAvatar = Object.assign({}, this._headers);
