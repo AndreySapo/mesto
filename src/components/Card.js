@@ -48,7 +48,7 @@ export default class Card {
 
     // слушатели кнопок
     this._cardLikeButton.addEventListener('click', () => this._handleCardLike(this));
-    this._cardTrashButton.addEventListener('click', () => this._handleCardDelete(this._cardID));
+    this._cardTrashButton.addEventListener('click', () => this._handleCardDelete(data, this));
     this._cardZoomButton.addEventListener('click', this._handleCardClick);
 
     return this._element

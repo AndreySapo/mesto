@@ -8,19 +8,16 @@ export default class PopupWithConfirm extends Popup {
     this._form = this._popup.querySelector('.popup__form');
   }
 
-  _submitCallbackHandler() {
-    this._submitCallback();
+  open(data, objectCard){
+    super.open();
+    this._cardData = data;
+    this._objectCard = objectCard;
   }
 
   setEventListeners() {
     super.setEventListeners();
     // добавляем слушатель, на него вешаем обработчик сабмита
-    this._popup.addEventListener('submit', this._submitCallbackHandler.bind(this));
-  }
-
-  remove() {
-    // DOM удаление карточки необходимо переместить в класс Card в виде отдельного метода, так как данное действие логически принадлежит сущности карточки, а не попапу
-    this._cardMarkup.remove();
+    this._popup.addEventListener('submit', () => this._submitCallback(this._cardData, this._objectCard));
   }
 
   renderLoading(isLoading) {

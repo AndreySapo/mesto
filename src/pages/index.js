@@ -36,8 +36,8 @@ function generateCard(cardData, userID) {
     userID: userID,
     template: '#card-template',
     handleCardClick: () => { cardPopup.open(cardData); },
-    handleCardDelete: () => {
-      confirmPopup.open()
+    handleCardDelete: (data, objectCard) => {
+      confirmPopup.open(data, objectCard)
     },
     handleCardLike: (thisCard) => {
       if (thisCard.likeState) {
@@ -45,25 +45,24 @@ function generateCard(cardData, userID) {
           .dislike(cardData._id)
           .then(result => {
             thisCard.removeLike(result.likes.length)
+          })
+          .catch((err) => {
+            console.log(err); // выведем ошибку в консоль
           });
       } else {
-        console.log('клик по НЕ лайкнутой карточке')
         api
           .like(cardData._id)
           .then(result => {
             thisCard.addLike(result.likes.length)
+          })
+          .catch((err) => {
+            console.log(err); // выведем ошибку в консоль
           });
       }
     }
   }
 }
 
-function deleteCard() {
-  
-}
-
-// Создание экземпляра класса попап с формой для редактирования профиля
-const userInfo = new UserInfo('.profile__name', '.profile__job', '.profile__avatar-img');
 
 // Работа с API
 // задаем настройки для запросов
@@ -77,11 +76,19 @@ const apiSettings = {
 const api = new Api(apiSettings);
 
 // создаем переменные для промисов
-const getUserPromise = api.getUser();
-const getInitialCardsPromise = api.getInitialCards();
+const getUserPromise = api.getUser().catch((err) => {
+  console.log(err); // выведем ошибку в консоль
+});
+
+const getInitialCardsPromise = api.getInitialCards().catch((err) => {
+  console.log(err); // выведем ошибку в консоль
+});
 
 // Создаём массив с промисами
 const promises = [getUserPromise, getInitialCardsPromise]
+
+// Создание экземпляра класса попап с формой для редактирования профиля
+const userInfo = new UserInfo('.profile__name', '.profile__job', '.profile__avatar-img');
 
 // Передаём массив с промисами методу Promise.all
 Promise.all(promises)
@@ -108,24 +115,26 @@ const cardPopup = new PopupWithImage('.img-zoom');
 cardPopup.setEventListeners();
 
 // создаем экземпляр секции с карточкамии
-const cardsContainer = new Section({
-  renderer: (item, userID) => {
-    const card = new Card(generateCard(item, userID));
-    cardsContainer.addItem(card);
-  }
-}, '.elements__grid');
+const cardsContainer = new Section(
+  {
+    renderer: (item, userID) => {
+      const card = new Card(generateCard(item, userID));
+      cardsContainer.addItem(card);
+    }
+  },
+  '.elements__grid');
 
 
 // ==========================================================
-
 // попап редактирования профиля
 const profileEditPopup = new PopupWithForm('.profile-popup', (inputValues) => {
   event.preventDefault();
   profileEditPopup.renderLoading(true);
-  api.setUserName({
-    name: inputValues.name,
-    about: inputValues.job
-  })
+  api
+    .setUserName({
+      name: inputValues.name,
+      about: inputValues.job
+    })
     .then((result) => {
       userInfo.setUserInfo(result);
       profileEditPopup.close();
@@ -146,17 +155,30 @@ profileEditButton.addEventListener('click', () => {
 });
 
 // ==========================================================
-// создаем экземпляр класса для удаления карточки
-const confirmPopup = new PopupWithConfirm('.confirm-popup', deleteCard());
+// создаем экземпляр класса попап для удаления карточки
+const confirmPopup = new PopupWithConfirm('.confirm-popup', (data, objectCard) => {
+  event.preventDefault();
+  confirmPopup.renderLoading(true);
+  api
+    .deleteCard(data._id)
+    .then(() => {
+      objectCard.deleteCard();
+      confirmPopup.close();
+    })
+    .catch((err) => {
+      console.log(err); // выведем ошибку в консоль
+    })
+    .finally(() => confirmPopup.renderLoading(false));
+});
 confirmPopup.setEventListeners();
 
+// ==========================================================
 // Создание экземпляра класса попап с формой для добавления карточки
 const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
   event.preventDefault();
   cardAddPopup.renderLoading(true);
   api.addNewCard({ name: inputs.place, link: inputs.picture })
     .then(result => {
-      // Чтобы не дублировать код (строки 80-120), создание карточки следует вынести в отдельную функцию
       const newCard = new Card(generateCard(result, result.owner._id));
       cardsContainer.addNewCard(newCard);
       cardAddPopup.close();
@@ -179,9 +201,6 @@ const avatarEditPopup = new PopupWithForm('.avatar-edit-popup', (input) => {
   avatarEditPopup.renderLoading(true)
   api.setAvatar(input)
     .then((result) => {
-      // DOM установку информации о пользователе следует осуществлять с помощью отдельных методов класса UserInfo:
-      // setUserInfo
-      // setUserAvavatar
       profileAvatar.src = result.avatar;
       avatarEditPopupButtonSave.classList.add('popup__button-save_inactive');
       avatarEditPopupButtonSave.setAttribute('disabled', true);
