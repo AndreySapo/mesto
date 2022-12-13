@@ -1,8 +1,6 @@
 import './index.css';
 
 import {
-  profileName,
-  profileAbout,
   profileEditButton,
   profileAddButton,
   profilePopupName,
@@ -31,6 +29,41 @@ import PopupWithConfirm from '../components/PopupWithConfirm';
 // https://shorturl.at/lwDTZ
 
 // ==========================================================
+
+function generateCard(cardData, userID) {
+  return {
+    data: cardData,
+    userID: userID,
+    template: '#card-template',
+    handleCardClick: () => { cardPopup.open(cardData); },
+    handleCardDelete: (data, objectCard) => {
+      confirmPopup.open(data, objectCard)
+    },
+    handleCardLike: (thisCard) => {
+      if (thisCard.likeState) {
+        api
+          .dislike(cardData._id)
+          .then(result => {
+            thisCard.removeLike(result.likes.length)
+          })
+          .catch((err) => {
+            console.log(err); // выведем ошибку в консоль
+          });
+      } else {
+        api
+          .like(cardData._id)
+          .then(result => {
+            thisCard.addLike(result.likes.length)
+          })
+          .catch((err) => {
+            console.log(err); // выведем ошибку в консоль
+          });
+      }
+    }
+  }
+}
+
+
 // Работа с API
 // задаем настройки для запросов
 const apiSettings = {
@@ -43,20 +76,27 @@ const apiSettings = {
 const api = new Api(apiSettings);
 
 // создаем переменные для промисов
-const getUserPromise = api.getUser();
-const getInitialCardsPromise = api.getInitialCards();
+const getUserPromise = api.getUser().catch((err) => {
+  console.log(err); // выведем ошибку в консоль
+});
+
+const getInitialCardsPromise = api.getInitialCards().catch((err) => {
+  console.log(err); // выведем ошибку в консоль
+});
 
 // Создаём массив с промисами
 const promises = [getUserPromise, getInitialCardsPromise]
+
+// Создание экземпляра класса попап с формой для редактирования профиля
+const userInfo = new UserInfo('.profile__name', '.profile__job', '.profile__avatar-img');
 
 // Передаём массив с промисами методу Promise.all
 Promise.all(promises)
   .then((results) => {
     // первый элемент - объект с именем
     const getUserResult = results[0];
-    profileName.textContent = getUserResult.name;
-    profileAbout.textContent = getUserResult.about;
-    profileAvatar.src = getUserResult.avatar;
+    userInfo.setUserInfo(getUserResult);
+    userInfo.setUserAvatar(getUserResult);
     const userID = results[0]._id;
 
     // второй элемент - массив карточек
@@ -75,74 +115,34 @@ const cardPopup = new PopupWithImage('.img-zoom');
 cardPopup.setEventListeners();
 
 // создаем экземпляр секции с карточкамии
-const cardsContainer = new Section({
-  renderer: (item, userID) => {
-    const card = new Card(
-      item,
-      userID,
-      '#card-template',
-      // handleCardClick
-      () => { cardPopup.open(item); },
-      // handleCardDelete
-      (cardID) => { confirmPopup.open(cardID, card) },
-      // handleCardLike
-      (cardMarkup, cardData) => {
-        const cardDataLikes = cardData.likes;
-        // если среди лайкнувших юзеров нет меня - тогда поставить лайк
-        if (!cardDataLikes.includes(userID)) {
-          cardDataLikes.push(userID);
-          const method = 'PUT';
-          api.toggleLike(method, cardData._id)
-            .then(result => {
-              cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
-              cardMarkup.querySelector('.element__button-like').classList.add('element__button-like_active');
-            })
-            .catch((err) => {
-              console.log(err); // выведем ошибку в консоль
-            });
-        } else { // иначе если среди лайкнувших юзеров есть я - тогда удалить меня из лайкнувших юзеров и снять лайк
-          const index = cardDataLikes.indexOf(userID);
-          if (index >= 0) {
-            cardDataLikes.splice(index, 1);
-          }
-
-          const method = 'DELETE';
-          api.toggleLike(method, cardData._id)
-            .then(result => {
-              cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
-              cardMarkup.querySelector('.element__button-like').classList.remove('element__button-like_active');
-            })
-            .catch((err) => {
-              console.log(err); // выведем ошибку в консоль
-            });
-        }
-      });
-    cardsContainer.addItem(card);
-  }
-}, '.elements__grid');
+const cardsContainer = new Section(
+  {
+    renderer: (item, userID) => {
+      const card = new Card(generateCard(item, userID));
+      cardsContainer.addItem(card);
+    }
+  },
+  '.elements__grid');
 
 
 // ==========================================================
-// Создание экземпляра класса попап с формой для редактирования профиля
-const userInfo = new UserInfo('.profile__name', '.profile__job');
-
 // попап редактирования профиля
 const profileEditPopup = new PopupWithForm('.profile-popup', (inputValues) => {
   event.preventDefault();
   profileEditPopup.renderLoading(true);
-  api.setUserName({
-    name: inputValues.name,
-    about: inputValues.job
-  })
+  api
+    .setUserName({
+      name: inputValues.name,
+      about: inputValues.job
+    })
     .then((result) => {
-      profileName.textContent = result.name;
-      profileAbout.textContent = result.about;
+      userInfo.setUserInfo(result);
+      profileEditPopup.close();
     })
     .catch((err) => {
       console.log(err); // выведем ошибку в консоль
     })
-    .finally(profileEditPopup.renderLoading(false));
-  profileEditPopup.close();
+    .finally(() => profileEditPopup.renderLoading(false));
   profilePopupButtonSave.classList.add('popup__button-save_inactive');
   profilePopupButtonSave.setAttribute('disabled', true);
 });
@@ -155,69 +155,31 @@ profileEditButton.addEventListener('click', () => {
 });
 
 // ==========================================================
-// создаем экземпляр класса для удаления карточки
-const confirmPopup = new PopupWithConfirm('.confirm-popup', (cardID, card) => {
+// создаем экземпляр класса попап для удаления карточки
+const confirmPopup = new PopupWithConfirm('.confirm-popup', (data, objectCard) => {
   event.preventDefault();
   confirmPopup.renderLoading(true);
-  api.deleteCard(cardID)
+  api
+    .deleteCard(data._id)
     .then(() => {
+      objectCard.deleteCard();
       confirmPopup.close();
-      card.remove();
     })
     .catch((err) => {
       console.log(err); // выведем ошибку в консоль
     })
-    .finally(confirmPopup.renderLoading(false));
+    .finally(() => confirmPopup.renderLoading(false));
 });
 confirmPopup.setEventListeners();
 
+// ==========================================================
 // Создание экземпляра класса попап с формой для добавления карточки
 const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
   event.preventDefault();
   cardAddPopup.renderLoading(true);
   api.addNewCard({ name: inputs.place, link: inputs.picture })
     .then(result => {
-      const newCard = new Card(result,
-        result.owner._id,
-        '#card-template',
-        // handleCardClick
-        () => { cardPopup.open(result) },
-        // handleCardDelete
-        (cardID) => { confirmPopup.open(cardID, newCard) }, 
-        // handleCardLike
-        // функция аналогична как и для начальных карточек, только получаем юзера из ответа API
-        (cardMarkup, cardData) => {
-          const cardDataLikes = cardData.likes;
-          if (!cardDataLikes.includes(result.owner._id)) {
-            cardDataLikes.push(result.owner._id);
-            const method = 'PUT';
-            api.toggleLike(method, cardData._id)
-              .then(result => {
-                cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
-                cardMarkup.querySelector('.element__button-like').classList.add('element__button-like_active');
-              })
-              .catch((err) => {
-                console.log(err); // выведем ошибку в консоль
-              });
-          } else {
-
-            const index = cardDataLikes.indexOf(result.owner._id);
-            if (index >= 0) {
-              cardDataLikes.splice(index, 1);
-            }
-
-            const method = 'DELETE';
-            api.toggleLike(method, cardData._id)
-              .then(result => {
-                cardMarkup.querySelector('.element__counter-like').textContent = result.likes.length;
-                cardMarkup.querySelector('.element__button-like').classList.remove('element__button-like_active');
-              })
-              .catch((err) => {
-                console.log(err); // выведем ошибку в консоль
-              });
-          }
-        }
-      );
+      const newCard = new Card(generateCard(result, result.owner._id));
       cardsContainer.addNewCard(newCard);
       cardAddPopup.close();
       cardAddPopupButtonSave.classList.add('popup__button-save_inactive');
@@ -226,7 +188,7 @@ const cardAddPopup = new PopupWithForm('.new-post-popup', (inputs) => {
     .catch((err) => {
       console.log(err); // выведем ошибку в консоль
     })
-    .finally(cardAddPopup.renderLoading(false));
+    .finally(() => cardAddPopup.renderLoading(false));
 });
 cardAddPopup.setEventListeners();
 
@@ -247,7 +209,7 @@ const avatarEditPopup = new PopupWithForm('.avatar-edit-popup', (input) => {
     .catch((err) => {
       console.log(err); // выведем ошибку в консоль
     })
-    .finally(avatarEditPopup.renderLoading(false));
+    .finally(() => avatarEditPopup.renderLoading(false));
 });
 avatarEditPopup.setEventListeners();
 

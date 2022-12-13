@@ -32,9 +32,8 @@ export default class PopupWithForm extends Popup {
 
   close() {
     super.close();
-    // сбрасываем форму и удаляем дополнительный слушатель
+    // сбрасываем форму
     this._form.reset();
-    this._popup.removeEventListener('submit', () => this._submitCallback(this._getInputValues()));
   }
 
   renderLoading(isLoading) {

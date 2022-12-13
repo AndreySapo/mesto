@@ -1,5 +1,5 @@
 export default class Card {
-  constructor(data, userID, template, handleCardClick, handleCardDelete, handleCardLike) {
+  constructor({data, userID, template, handleCardClick, handleCardDelete, handleCardLike}) {
     // поиск и копирование шаблона 
     this._cardTemplate = document.querySelector(template).content;
     this._cardTemplateClone = this._cardTemplate.cloneNode(true);
@@ -30,24 +30,43 @@ export default class Card {
     this._cardZoomButton = this._element.querySelector('.element__button-zoom');
 
     // если айди владельца карточки совпадает с моим айди - включаем мусорку
-    if (data.owner._id == userID) {
+    if (data.owner._id === userID) {
       this._cardTrashButton.removeAttribute('disabled', true);
       this._cardTrashButton.style.visibility = 'visible';
     }
+
+    this.likeState = false;
 
     // лайки - это массив. для каждого элемента массива лайков (т.е. объекта юзера) делаем проверку
     // если айди лайкнувшего человека = мой айди, тогда элементу кнопки лайка добавляем состояние активной кнопки
     data.likes.forEach((user) => {
       if (user._id === userID) {
         this._cardLikeButton.classList.add('element__button-like_active');
+        this.likeState = true;
       }
     })
 
     // слушатели кнопок
-    this._cardLikeButton.addEventListener('click', () => this._handleCardLike(this._element, data));
-    this._cardTrashButton.addEventListener('click', () => this._handleCardDelete(this._cardID)); //this._remove.bind(this)
+    this._cardLikeButton.addEventListener('click', () => this._handleCardLike(this));
+    this._cardTrashButton.addEventListener('click', () => this._handleCardDelete(data, this));
     this._cardZoomButton.addEventListener('click', this._handleCardClick);
 
     return this._element
+  }
+
+  addLike(length){
+    this._cardLikeButton.classList.add('element__button-like_active')
+    this._cardLikes.textContent = length
+    this.likeState = true
+  }
+
+  removeLike(length){
+    this._cardLikeButton.classList.remove('element__button-like_active')
+    this._cardLikes.textContent = length
+    this.likeState = false
+  }
+
+  deleteCard(){
+    this._element.remove();
   }
 }
