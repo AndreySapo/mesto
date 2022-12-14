@@ -76,13 +76,9 @@ const apiSettings = {
 const api = new Api(apiSettings);
 
 // создаем переменные для промисов
-const getUserPromise = api.getUser().catch((err) => {
-  console.log(err); // выведем ошибку в консоль
-});
+const getUserPromise = api.getUser();
 
-const getInitialCardsPromise = api.getInitialCards().catch((err) => {
-  console.log(err); // выведем ошибку в консоль
-});
+const getInitialCardsPromise = api.getInitialCards();
 
 // Создаём массив с промисами
 const promises = [getUserPromise, getInitialCardsPromise]
@@ -201,7 +197,8 @@ const avatarEditPopup = new PopupWithForm('.avatar-edit-popup', (input) => {
   avatarEditPopup.renderLoading(true)
   api.setAvatar(input)
     .then((result) => {
-      profileAvatar.src = result.avatar;
+      // profileAvatar.src = result.avatar;
+      userInfo.setUserAvatar(result);
       avatarEditPopupButtonSave.classList.add('popup__button-save_inactive');
       avatarEditPopupButtonSave.setAttribute('disabled', true);
       avatarEditPopup.close();

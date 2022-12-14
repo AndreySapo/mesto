@@ -10,14 +10,14 @@ export default class PopupWithConfirm extends Popup {
 
   open(data, objectCard){
     super.open();
-    this._cardData = data;
+    this._itemData = data;
     this._objectCard = objectCard;
   }
 
   setEventListeners() {
     super.setEventListeners();
     // добавляем слушатель, на него вешаем обработчик сабмита
-    this._popup.addEventListener('submit', () => this._submitCallback(this._cardData, this._objectCard));
+    this._popup.addEventListener('submit', () => this._submitCallback(this._itemData, this._objectCard));
   }
 
   renderLoading(isLoading) {
